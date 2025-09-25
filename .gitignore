@@ -41,3 +41,25 @@ next-env.d.ts
 
 .idea/
 .pnpm-store
+
+
+/node_modules
+
+# билды
+/.next
+/build
+/dist
+
+# логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# окружение
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# кеши
+.cache
