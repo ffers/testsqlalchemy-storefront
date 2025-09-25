@@ -49,12 +49,12 @@ next-env.d.ts
 /.next
 /build
 /dist
-
+.next
 # логи
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+/
 # окружение
 .env.local
 .env.development.local
