@@ -223,7 +223,7 @@ export default async function Page(props: {
 								selectedVariant={selectedVariant}
 								variants={variants}
 								product={product}
-								channel={process.env.NEXT_PUBLIC_DEFAULT_CHANNEL!}
+								channel={params.channel}
 							/>
 						)}
 						<AvailabilityMessage isAvailable={isAvailable} />
