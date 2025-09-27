@@ -18,7 +18,7 @@ export const addressFieldMessages: Record<AddressFieldLabel, string> = {
 	country: "Країна",
 	cityArea: "City area",
 	postalCode: "Postal code",
-	// companyName: "Company",
+	companyName: "Company",
 	streetAddress1: "Street address",
 	streetAddress2: "Street address (continue)",
 	phone: "Phone number",
