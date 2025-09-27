@@ -63,57 +63,45 @@ export async function generateMetadata(
 			: null,
 	};
 }
-export async function generateStaticParams() {
-	// ffers { params }: { params: { channel: string } } на ()
-	const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL;
-	if (!channel) {
-		throw new Error("❌ NEXT_PUBLIC_DEFAULT_CHANNEL is not defined");
-	}
-
+export async function generateStaticParams({ params }: { params: { channel: string } }) {
 	const { products } = await executeGraphQL(ProductListDocument, {
-		// revalidate: 60,
-		variables: { first: 20, channel },
+		revalidate: 60,
+		variables: { first: 20, channel: params.channel },
 		withAuth: false,
 	});
 
-	const paths =
-		products?.edges.map(({ node: { slug } }) => ({
-			slug,
-			channel,
-		})) || [];
+	const paths = products?.edges.map(({ node: { slug } }) => ({ slug })) || [];
 	return paths;
 }
-
 const parser = edjsHTML();
 
-// export default async function Page(props: {
-// 	params: Promise<{ slug: string; channel: string }>;
-// 	searchParams: Promise<{ variant?: string }>;
-// }) {
-// 	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
-// 	const { product } = await executeGraphQL(ProductDetailsDocument, {
-// 		variables: {
-// 			slug: decodeURIComponent(params.slug),
-// 			channel: params.channel,
-// 		},
-// 		// revalidate: 60,
-// 	});
-
 export default async function Page(props: {
-	params: Promise<{ slug: string }>; // 👈 оставляем Promise
-	searchParams: Promise<{ variant?: string }>; // 👈 оставляем Promise
+	params: Promise<{ slug: string; channel: string }>;
+	searchParams: Promise<{ variant?: string }>;
 }) {
 	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
-
-	// 👇 берём канал только из .env
-	const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL!;
-
 	const { product } = await executeGraphQL(ProductDetailsDocument, {
 		variables: {
 			slug: decodeURIComponent(params.slug),
-			channel,
+			channel: params.channel,
 		},
+		// revalidate: 60,
 	});
+
+	// export default async function Page(props: {
+	// 	params: Promise<{ slug: string }>; // 👈 оставляем Promise
+	// 	searchParams: Promise<{ variant?: string }>; // 👈 оставляем Promise
+	// }) {
+	// 	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
+
+	// 	const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL!;
+
+	// 	const { product } = await executeGraphQL(ProductDetailsDocument, {
+	// 		variables: {
+	// 			slug: decodeURIComponent(params.slug),
+	// 			channel,
+	// 		},
+	// 	});
 
 	if (!product) {
 		notFound();
