@@ -11,14 +11,14 @@ import { getOrderedAddressFields, getRequiredAddressFields } from "@/checkout/co
 
 export type AddressFieldLabel = Exclude<AddressField, "countryCode"> | "country";
 export const addressFieldMessages: Record<AddressFieldLabel, string> = {
-	city: "City",
-	firstName: "First name",
-	countryArea: "Country area",
-	lastName: "Last name",
-	country: "Country",
+	city: "Місто",
+	firstName: "Імʼя",
+	countryArea: "Країна",
+	lastName: "Прізвище",
+	country: "Країна",
 	cityArea: "City area",
 	postalCode: "Postal code",
-	companyName: "Company",
+	// companyName: "Company",
 	streetAddress1: "Street address",
 	streetAddress2: "Street address (continue)",
 	phone: "Phone number",
