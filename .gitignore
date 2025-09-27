@@ -63,3 +63,4 @@ yarn-error.log*
 
 # кеши
 .cache
+/.vscode

@@ -63,7 +63,6 @@ export async function generateMetadata(
 			: null,
 	};
 }
-
 export async function generateStaticParams() {
 	// ffers { params }: { params: { channel: string } } на ()
 	const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL;
@@ -77,7 +76,11 @@ export async function generateStaticParams() {
 		withAuth: false,
 	});
 
-	const paths = products?.edges.map(({ node: { slug } }) => ({ slug })) || [];
+	const paths =
+		products?.edges.map(({ node: { slug } }) => ({
+			slug,
+			channel,
+		})) || [];
 	return paths;
 }
 
