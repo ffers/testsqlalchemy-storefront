@@ -117,15 +117,13 @@ export default async function Page(props: {
 	async function addItem() {
 		"use server";
 
-		const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL!;
-
 		const checkout = await Checkout.findOrCreate({
-			checkoutId: await Checkout.getIdFromCookies(channel),
-			channel,
+			checkoutId: await Checkout.getIdFromCookies(params.channel),
+			channel: params.channel,
 		});
 		invariant(checkout, "This should never happen");
 
-		await Checkout.saveIdToCookie(channel, checkout.id);
+		await Checkout.saveIdToCookie(params.channel, checkout.id);
 
 		if (!selectedVariantID) {
 			return;
