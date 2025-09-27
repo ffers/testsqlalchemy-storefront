@@ -1,9 +1,15 @@
 /** @type {import('next').NextConfig} */
 const config = {
 	images: {
+		unoptimized: true,
 		remotePatterns: [
 			{
-				hostname: "*",
+				protocol: "https",
+				hostname: "jemis.com.ua",
+			},
+			{
+				protocol: "https",
+				hostname: "www.jemis.com.ua",
 			},
 		],
 	},
@@ -15,8 +21,8 @@ const config = {
 		process.env.NEXT_OUTPUT === "standalone"
 			? "standalone"
 			: process.env.NEXT_OUTPUT === "export"
-			  ? "export"
-			  : undefined,
+				? "export"
+				: undefined,
 };
 
 export default config;

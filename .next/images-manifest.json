@@ -35,11 +35,17 @@
     "contentDispositionType": "attachment",
     "remotePatterns": [
       {
-        "hostname": "^(?:(?!\\.)(?=.)[^/]*?\\/?)$",
+        "protocol": "https",
+        "hostname": "^(?:^(?:jemis\\.com\\.ua)$)$",
+        "pathname": "^(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)\\/?)$"
+      },
+      {
+        "protocol": "https",
+        "hostname": "^(?:^(?:www\\.jemis\\.com\\.ua)$)$",
         "pathname": "^(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)\\/?)$"
       }
     ],
-    "unoptimized": false,
+    "unoptimized": true,
     "sizes": [
       640,
       750,

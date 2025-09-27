@@ -3,7 +3,7 @@ name: Deploy Storefront
 on:
   push:
     branches:
-      - main   # деплой при пуше в main
+      - main # деплой при пуше в main
 
 jobs:
   build-and-deploy:
@@ -40,5 +40,5 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          source: ".next/*"
+          source: ".next/*,public/*,package.json,pnpm-lock.yaml"
           target: "/home/fferses/storefront"

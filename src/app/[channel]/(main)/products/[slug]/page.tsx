@@ -14,6 +14,10 @@ import { CheckoutAddLineDocument, ProductDetailsDocument, ProductListDocument } 
 import * as Checkout from "@/lib/checkout";
 import { AvailabilityMessage } from "@/ui/components/AvailabilityMessage";
 
+// export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 60;
+export const fetchCache = "force-no-store";
 export async function generateMetadata(
 	props: {
 		params: Promise<{ slug: string; channel: string }>;
@@ -28,7 +32,7 @@ export async function generateMetadata(
 			slug: decodeURIComponent(params.slug),
 			channel: params.channel,
 		},
-		revalidate: 60,
+		revalidate: 0,
 	});
 
 	if (!product) {
@@ -60,10 +64,16 @@ export async function generateMetadata(
 	};
 }
 
-export async function generateStaticParams({ params }: { params: { channel: string } }) {
+export async function generateStaticParams() {
+	// ffers { params }: { params: { channel: string } } на ()
+	const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL;
+	if (!channel) {
+		throw new Error("❌ NEXT_PUBLIC_DEFAULT_CHANNEL is not defined");
+	}
+
 	const { products } = await executeGraphQL(ProductListDocument, {
-		revalidate: 60,
-		variables: { first: 20, channel: params.channel },
+		// revalidate: 60,
+		variables: { first: 20, channel },
 		withAuth: false,
 	});
 
@@ -73,17 +83,33 @@ export async function generateStaticParams({ params }: { params: { channel: stri
 
 const parser = edjsHTML();
 
+// export default async function Page(props: {
+// 	params: Promise<{ slug: string; channel: string }>;
+// 	searchParams: Promise<{ variant?: string }>;
+// }) {
+// 	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
+// 	const { product } = await executeGraphQL(ProductDetailsDocument, {
+// 		variables: {
+// 			slug: decodeURIComponent(params.slug),
+// 			channel: params.channel,
+// 		},
+// 		// revalidate: 60,
+// 	});
+
 export default async function Page(props: {
-	params: Promise<{ slug: string; channel: string }>;
-	searchParams: Promise<{ variant?: string }>;
+	params: Promise<{ slug: string }>; // 👈 оставляем Promise
+	searchParams: Promise<{ variant?: string }>; // 👈 оставляем Promise
 }) {
 	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
+
+	// 👇 берём канал только из .env
+	const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL!;
+
 	const { product } = await executeGraphQL(ProductDetailsDocument, {
 		variables: {
 			slug: decodeURIComponent(params.slug),
-			channel: params.channel,
+			channel,
 		},
-		revalidate: 60,
 	});
 
 	if (!product) {
@@ -100,13 +126,19 @@ export default async function Page(props: {
 	async function addItem() {
 		"use server";
 
+		const channel = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL!;
+
 		const checkout = await Checkout.findOrCreate({
-			checkoutId: await Checkout.getIdFromCookies(params.channel),
-			channel: params.channel,
+			checkoutId: await Checkout.getIdFromCookies(channel),
+			channel,
 		});
 		invariant(checkout, "This should never happen");
 
-		await Checkout.saveIdToCookie(params.channel, checkout.id);
+		await Checkout.saveIdToCookie(channel, checkout.id);
+
+		if (!selectedVariantID) {
+			return;
+		}
 
 		if (!selectedVariantID) {
 			return;
@@ -202,7 +234,7 @@ export default async function Page(props: {
 								selectedVariant={selectedVariant}
 								variants={variants}
 								product={product}
-								channel={params.channel}
+								channel={process.env.NEXT_PUBLIC_DEFAULT_CHANNEL!}
 							/>
 						)}
 						<AvailabilityMessage isAvailable={isAvailable} />

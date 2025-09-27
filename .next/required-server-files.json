@@ -60,10 +60,15 @@
       "contentDispositionType": "attachment",
       "remotePatterns": [
         {
-          "hostname": "*"
+          "protocol": "https",
+          "hostname": "jemis.com.ua"
+        },
+        {
+          "protocol": "https",
+          "hostname": "www.jemis.com.ua"
         }
       ],
-      "unoptimized": false
+      "unoptimized": true
     },
     "devIndicators": {
       "position": "bottom-left"
