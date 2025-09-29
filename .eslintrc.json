@@ -13,6 +13,7 @@
 		"next/core-web-vitals"
 	],
 	"rules": {
+        
 		// sort imports
 		"import/order": "error",
 
@@ -81,6 +82,7 @@
 		],
 		"@typescript-eslint/no-unsafe-assignment": "warn",
 		"react/no-unescaped-entities": "warn"
+        
 	},
 	"overrides": [
 		{
@@ -105,10 +107,13 @@
 				]
 			}
 		},
+        
 		{
 			"files": ["__tests__/**/*.{ts,tsx}"],
 			"extends": ["plugin:playwright/recommended"]
 		}
+        
 	],
 	"ignorePatterns": ["*.js", "*.jsx", "*.cjs", "src/checkout/src/graphql"]
+    
 }
