@@ -7,7 +7,6 @@ import { SummaryPromoCodeRow } from "./SummaryPromoCodeRow";
 import { SummaryItemMoneyEditableSection } from "./SummaryItemMoneyEditableSection";
 import { ChevronDownIcon } from "@/checkout/ui-kit/icons";
 
-import { getFormattedMoney } from "@/checkout/lib/utils/money";
 import { Divider, Money, Title } from "@/checkout/components";
 import {
 	type CheckoutLineFragment,
