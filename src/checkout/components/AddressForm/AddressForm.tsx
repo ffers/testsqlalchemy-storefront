@@ -75,44 +75,70 @@ export const AddressForm: FC<PropsWithChildren<AddressFormProps>> = ({
 		}
 	}, [allowedFields, dirty, setValues, values]);
 
+	const HIDDEN_FIELDS = ["streetAddress2", "companyName"];
+	function shouldShouwField(field: AddressField) {
+		if (HIDDEN_FIELDS.includes(field)) {
+			return false;
+		}
+		if (field == "countryArea" && !isRequiredField("countryArea")) {
+			return false;
+		}
+		if (field == "postalCode" && !isRequiredField("postalCode")) {
+			return false;
+		}
+		return true;
+	}
+
 	return (
 		<>
 			<Title className="mb-4">{title}</Title>
 			<div className="mt-2 grid grid-cols-1 gap-3">
 				<CountrySelect only={availableCountries} />
-				{orderedAddressFields.map((field) => {
-					const isRequired = isRequiredField(field);
-					const label = getFieldLabel(field);
+				{orderedAddressFields
 
-					const commonProps = {
-						key: field,
-						name: field,
-						label: label,
-						autoComplete: autocompleteTags[field],
-						validate: customValidators[field],
-						...fieldProps,
-					};
+					.filter((field) => shouldShouwField(field))
+					.map((field) => {
+						let isRequired = isRequiredField(field);
+						if (field === "phone") {
+							isRequired = true;
+						}
 
-					if (field === "countryArea" && isRequired) {
+						const label = getFieldLabel(field);
+
+						const commonProps = {
+							key: field,
+							name: field,
+							label: label,
+							autoComplete: autocompleteTags[field],
+							validate: customValidators[field],
+							...fieldProps,
+						};
+
+						if (field === "countryArea" && isRequired) {
+							return (
+								<Select
+									{...commonProps}
+									key={field}
+									placeholder={getFieldLabel("countryArea")}
+									options={
+										countryAreaChoices?.map(({ verbose, raw }) => ({
+											label: verbose as string,
+											value: raw as string,
+										})) || []
+									}
+								/>
+							);
+						}
+
 						return (
-							<Select
+							<TextInput
+								required={isRequired}
 								{...commonProps}
 								key={field}
-								placeholder={getFieldLabel("countryArea")}
-								options={
-									countryAreaChoices?.map(({ verbose, raw }) => ({
-										label: verbose as string,
-										value: raw as string,
-									})) || []
-								}
+								type={typeTags[field] || "text"}
 							/>
 						);
-					}
-
-					return (
-						<TextInput required={isRequired} {...commonProps} key={field} type={typeTags[field] || "text"} />
-					);
-				})}
+					})}
 				{children}
 			</div>
 		</>

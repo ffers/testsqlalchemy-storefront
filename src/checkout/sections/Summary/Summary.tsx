@@ -92,14 +92,17 @@ export const Summary: FC<SummaryProps> = ({
 						negative
 					/>
 				))}
-				<SummaryMoneyRow label="Shipping cost" ariaLabel="shipping cost" money={shippingPrice?.gross} />
+				{/* <SummaryMoneyRow label="Shipping cost" ariaLabel="shipping cost" money={shippingPrice?.gross} /> */}
+				{shippingPrice?.gross.amount > 0 && (
+					<SummaryMoneyRow label="Shipping cost" ariaLabel="shipping cost" money={shippingPrice?.gross} />
+				)}
 				<Divider className="my-4" />
 				<div className="flex flex-row items-baseline justify-between pb-4">
 					<div className="flex flex-row items-baseline">
 						<p className="font-bold">Total price</p>
-						<p color="secondary" className="ml-2">
+						{/* <p color="secondary" className="ml-2">
 							includes {getFormattedMoney(totalPrice?.tax)} tax
-						</p>
+						</p> */}
 					</div>
 					<Money ariaLabel="total price" money={totalPrice?.gross} data-testid="totalOrderPrice" />
 				</div>

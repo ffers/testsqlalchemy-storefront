@@ -47,7 +47,8 @@ export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => 
 									<div className="pointer-events-none flex min-h-12 grow flex-col justify-center">
 										<div className="flex flex-row items-center justify-between self-stretch">
 											<p>{name}</p>
-											<p>{getFormattedMoney(price)}</p>
+											{price?.amount > 0 && <p>{getFormattedMoney(price)}</p>}{" "}
+											{/* <p>{getFormattedMoney(price)}</p> */}
 										</div>
 										<p className="font-xs" color="secondary">
 											{getSubtitle({ min, max })}

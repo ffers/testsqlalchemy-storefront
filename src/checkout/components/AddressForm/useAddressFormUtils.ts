@@ -32,12 +32,13 @@ export type LocalizedAddressFieldLabel =
 	| "postal"
 	| "postTown"
 	| "prefecture";
+
 export const localizedAddressFieldMessages: Record<LocalizedAddressFieldLabel, string> = {
 	province: "Province",
 	district: "District",
-	state: "Виберіть страну Україна щоб прибрати це поле",
+	state: "Штат",
 	zip: "Індекс",
-	postal: "Postal code",
+	postal: "Індекс",
 	postTown: "Post town",
 	prefecture: "Prefecture",
 };
