@@ -13,13 +13,14 @@ export const usePaymentGatewaysInitialize = () => {
 	const {
 		checkout: { id: checkoutId, availablePaymentGateways },
 	} = useCheckout();
+	console.log("From checkout:", availablePaymentGateways);
 
 	const billingCountry = billingAddress?.country.code as MightNotExist<CountryCode>;
 
-	const [gatewayConfigs, setGatewayConfigs] = useState<ParsedPaymentGateways>([]);
+	const [, setGatewayConfigs] = useState<ParsedPaymentGateways>([]);
 	const previousBillingCountry = useRef(billingCountry);
 
-	const [{ fetching }, paymentGatewaysInitialize] = usePaymentGatewaysInitializeMutation();
+	const [, paymentGatewaysInitialize] = usePaymentGatewaysInitializeMutation();
 
 	const onSubmit = useSubmit<{}, typeof paymentGatewaysInitialize>(
 		useMemo(
@@ -54,7 +55,7 @@ export const usePaymentGatewaysInitialize = () => {
 
 	useEffect(() => {
 		void onSubmit();
-	}, []);
+	}, [onSubmit]); //fferses
 
 	useEffect(() => {
 		if (billingCountry !== previousBillingCountry.current) {
@@ -63,8 +64,12 @@ export const usePaymentGatewaysInitialize = () => {
 		}
 	}, [billingCountry, onSubmit]);
 
+	// return {
+	// 	fetching,
+	// 	availablePaymentGateways: gatewayConfigs || [], // ffers
+	// };
 	return {
-		fetching,
-		availablePaymentGateways: gatewayConfigs || [],
+		fetching: false,
+		availablePaymentGateways: availablePaymentGateways ?? [],
 	};
 };

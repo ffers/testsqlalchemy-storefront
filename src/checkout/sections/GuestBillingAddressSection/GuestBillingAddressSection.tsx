@@ -30,7 +30,7 @@ export const GuestBillingAddressSection = () => {
 					<FormProvider form={billingSameAsShippingForm}>
 						<Checkbox
 							name="billingSameAsShipping"
-							label="Use shipping address as billing address"
+							label="Використовувати адресу доставки як платіжну адресу"
 							data-testid="useShippingAsBillingCheckbox"
 						/>
 					</FormProvider>

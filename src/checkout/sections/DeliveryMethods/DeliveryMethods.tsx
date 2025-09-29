@@ -35,10 +35,8 @@ export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => 
 		<FormProvider form={form}>
 			<Divider />
 			<div className="py-4" data-testid="deliveryMethods">
-				<Title className="mb-2">Delivery methods</Title>
-				{!authenticated && !shippingAddress && (
-					<p>Please fill in shipping address to see available shipping methods</p>
-				)}
+				<Title className="mb-2">Метод Доставки</Title>
+				{!authenticated && !shippingAddress && <p>Заповніть обовязкові поля для вибору методу доставки</p>}
 				{authenticated && !shippingAddress && updateState.checkoutShippingUpdate ? (
 					<DeliveryMethodsSkeleton />
 				) : (
@@ -46,7 +44,7 @@ export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => 
 						{shippingMethods?.map(
 							({ id, name, price, minimumDeliveryDays: min, maximumDeliveryDays: max }) => (
 								<SelectBox key={id} name="selectedMethodId" value={id}>
-									<div className="min-h-12 pointer-events-none flex grow flex-col justify-center">
+									<div className="pointer-events-none flex min-h-12 grow flex-col justify-center">
 										<div className="flex flex-row items-center justify-between self-stretch">
 											<p>{name}</p>
 											<p>{getFormattedMoney(price)}</p>

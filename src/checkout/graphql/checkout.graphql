@@ -184,6 +184,14 @@ fragment AddressFragment on Address {
 query checkout($id: ID!, $languageCode: LanguageCodeEnum!) {
 	checkout(id: $id) {
 		...CheckoutFragment
+		availablePaymentGateways {
+			id
+			name
+			config {
+				field
+				value
+			}
+		}
 	}
 }
 

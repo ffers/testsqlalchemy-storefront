@@ -16,12 +16,12 @@ export const addressFieldMessages: Record<AddressFieldLabel, string> = {
 	countryArea: "Країна",
 	lastName: "Прізвище",
 	country: "Країна",
-	cityArea: "City area",
-	postalCode: "Postal code",
-	companyName: "Company",
-	streetAddress1: "Street address",
-	streetAddress2: "Street address (continue)",
-	phone: "Phone number",
+	cityArea: "Область",
+	postalCode: "Індекс",
+	companyName: "Компанія необоʼязково",
+	streetAddress1: "Відділеня або адресса отримання",
+	streetAddress2: "Додаткова адресса",
+	phone: "Телефон",
 };
 
 export type LocalizedAddressFieldLabel =
@@ -35,8 +35,8 @@ export type LocalizedAddressFieldLabel =
 export const localizedAddressFieldMessages: Record<LocalizedAddressFieldLabel, string> = {
 	province: "Province",
 	district: "District",
-	state: "State",
-	zip: "Zip code",
+	state: "Виберіть страну Україна щоб прибрати це поле",
+	zip: "Індекс",
 	postal: "Postal code",
 	postTown: "Post town",
 	prefecture: "Prefecture",

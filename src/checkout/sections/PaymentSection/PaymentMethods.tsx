@@ -15,6 +15,8 @@ export const PaymentMethods = () => {
 		() => availablePaymentGateways.filter((gateway) => gateway.id in paymentMethodToComponent),
 		[availablePaymentGateways],
 	);
+	console.log("Gateways from API:", availablePaymentGateways);
+	console.log("Expected IDs:", Object.keys(paymentMethodToComponent));
 
 	// delivery methods change total price so we want to wait until the change is done
 	if (changingBillingCountry || fetching || checkoutDeliveryMethodUpdate === "loading") {
@@ -24,7 +26,8 @@ export const PaymentMethods = () => {
 	return (
 		<div className="gap-y-8">
 			{gatewaysWithDefinedComponent.map((gateway) => {
-				const Component = paymentMethodToComponent[gateway.id];
+
+				const Component = paymentMethodToComponent[gateway.id as keyof typeof paymentMethodToComponent]; // fferses
 				return (
 					<Component
 						key={gateway.id}

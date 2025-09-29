@@ -12,6 +12,7 @@ export const useCheckout = ({ pause = false } = {}) => {
 		variables: { id, languageCode: "EN_US" },
 		pause: pause,
 	});
+	console.log("useCheckout:", data);
 
 	useEffect(() => setLoadingCheckout(fetching || stale), [fetching, setLoadingCheckout, stale]);
 
