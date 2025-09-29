@@ -47,7 +47,7 @@ export const Summary: FC<SummaryProps> = ({
 		>
 			<details open className="group">
 				<summary className="-mb-2 flex cursor-pointer flex-row items-center pt-4">
-					<Title>Summary</Title>
+					<Title>Підсумок</Title>
 					<ChevronDownIcon className="mb-2 group-open:rotate-180" />
 				</summary>
 				<ul className="py-2" data-testid="SummaryProductList">
@@ -69,7 +69,7 @@ export const Summary: FC<SummaryProps> = ({
 				</>
 			)}
 			<div className="mt-4 flex max-w-full flex-col">
-				<SummaryMoneyRow label="Subtotal" money={subtotalPrice?.gross} ariaLabel="subtotal price" />
+				<SummaryMoneyRow label="Загально" money={subtotalPrice?.gross} ariaLabel="subtotal price" />
 				{voucherCode && (
 					<SummaryPromoCodeRow
 						editable={editable}
@@ -98,7 +98,7 @@ export const Summary: FC<SummaryProps> = ({
 				<Divider className="my-4" />
 				<div className="flex flex-row items-baseline justify-between pb-4">
 					<div className="flex flex-row items-baseline">
-						<p className="font-bold">Total price</p>
+						<p className="font-bold">Загальна сумма</p>
 						{/* <p color="secondary" className="ml-2">
 							includes {getFormattedMoney(totalPrice?.tax)} tax
 						</p> */}

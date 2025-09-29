@@ -11,11 +11,11 @@ export const OrderConfirmation = () => {
 			<div>
 				<header>
 					<p className="mb-2 text-lg font-bold" data-testid="orderConfrmationTitle">
-						Order #{order.number} confirmed
+						Замовленя #{order.number} підтверджено
 					</p>
 					<p className="text-base">
-						Thank you for placing your order. We&apos;ve received it and we will contact you as soon as your
-						package is shipped. A confirmation email has been sent to {order.userEmail}.
+						Дякуємо за ваше замовлення. Ми отримали його та зв’яжемося з вами, щойно ваша посилка буде
+						відправлена. Підтвердження надіслано на адресу {order.userEmail}.
 					</p>
 				</header>
 				<OrderInfo />

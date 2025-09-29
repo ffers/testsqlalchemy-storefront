@@ -23,7 +23,7 @@ export const GuestUser: React.FC<GuestUserProps> = ({
 		<SignInFormContainer
 			title="Контактна інформація"
 			redirectSubtitle="Вже зареєстровани?"
-			redirectButtonLabel="Зареєструватися"
+			redirectButtonLabel="Увійти"
 			onSectionChange={onSectionChange}
 		>
 			<FormProvider form={form}>
@@ -31,7 +31,7 @@ export const GuestUser: React.FC<GuestUserProps> = ({
 					<TextInput
 						required
 						name="email"
-						label="Email"
+						label="Електронна пошта"
 						onChange={(event) => {
 							handleChange(event);
 							onEmailChange(event.currentTarget.value);

@@ -50,7 +50,7 @@ export async function selectRandomAvailableVariant({ page }: { page: Page }) {
 export async function addCurrentProductToCart({ page }: { page: Page }) {
 	expect(page.url()).toContain("/products/");
 	expect(page.url()).toContain("?variant=");
-	const checkoutButton = page.getByRole("button", { name: "Add to cart" });
+	const checkoutButton = page.getByRole("button", { name: "Додати до кошика" });
 	await checkoutButton.click();
 	await checkoutButton.isEnabled();
 }

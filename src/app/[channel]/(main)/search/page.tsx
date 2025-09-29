@@ -6,8 +6,8 @@ import { ProductList } from "@/ui/components/ProductList";
 import { ProductsPerPage } from "@/app/config";
 
 export const metadata = {
-	title: "Search products · Saleor Storefront example",
-	description: "Search products in Saleor Storefront example",
+	title: "Пошук товарів· Jemis Web",
+	description: "Пошук товарів на Jemis Web",
 };
 
 export default async function Page(props: {
@@ -66,7 +66,7 @@ export default async function Page(props: {
 					/>
 				</div>
 			) : (
-				<h1 className="mx-auto pb-8 text-center text-xl font-semibold">Nothing found :(</h1>
+				<h1 className="mx-auto pb-8 text-center text-xl font-semibold">Нічого не знайдено :(</h1>
 			)}
 		</section>
 	);

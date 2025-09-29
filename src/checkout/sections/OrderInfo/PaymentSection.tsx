@@ -27,9 +27,9 @@ const SuccessMessage = ({ message }: { message: string }) => {
 export const PaymentSection = () => {
 	const { order } = useOrder();
 	const paymentStatus = usePaymentStatus(order);
-
+	console.log("paymentStatus", paymentStatus);
 	return (
-		<Section title="Payment">
+		<Section title="Оплата">
 			<div data-testid="paymentStatus">
 				<div className="flex flex-row items-center">
 					{paymentStatus === "authorized" && (

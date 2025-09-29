@@ -2,19 +2,19 @@ import { useCallback, useMemo } from "react";
 import { type ErrorCode } from "@/checkout/lib/globalTypes";
 
 export const errorMessages = {
-	invalid: "Invalid value",
-	required: "Required field",
-	unique: "Value must be unique",
-	emailInvalid: "Email must be a valid email",
-	passwordAtLeastCharacters: "Password must be at least 8 characters",
-	passwordTooShort: "Provided password is too short. Minimum length is 8 characters.",
-	passwordTooSimilar: "Provided password is too similar to your previous password.",
-	passwordTooCommon: "Provided password is too common. Use something more fancy.",
-	passwordInvalid: "Provided password is invalid.",
-	quantityGreaterThanLimit: "Chosen quantity is more than limit allowed.",
-	insufficientStock: "Not enough of chosen item in stock.",
-	invalidCredentials: "Invalid credentials provided at login.",
-	missingFields: "Missing fields in address form: ",
+	invalid: "Недійсне значення",
+	required: "Обов'язкове поле",
+	unique: "Значення має бути унікальним",
+	emailInvalid: "Електронна адреса має бути дійсною",
+	passwordAtLeastCharacters: "Пароль має містити щонайменше 8 символів",
+	passwordTooShort: "Наданий пароль занадто короткий. Мінімальна довжина — 8 символів.",
+	passwordTooSimilar: "Введений пароль занадто схожий на ваш попередній пароль.",
+	passwordTooCommon: "Наданий пароль занадто поширений. Використайте щось складніше.",
+	passwordInvalid: "Введений пароль недійсний.",
+	quantityGreaterThanLimit: "Обрана кількість перевищує дозволену.",
+	insufficientStock: "Недостатньо обраного товару на складі.",
+	invalidCredentials: "Під час входу було надано недійсні облікові дані.",
+	missingFields: "Відсутні поля у формі адреси: ",
 } satisfies Record<ErrorCode, string>;
 
 export type ErrorMessages = Record<ErrorCode, string>;

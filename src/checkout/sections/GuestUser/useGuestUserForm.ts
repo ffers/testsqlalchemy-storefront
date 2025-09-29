@@ -42,7 +42,7 @@ export const useGuestUserForm = ({ initialEmail }: GuestUserFormProps) => {
 		createAccount: bool(),
 		email: string().email(errorMessages.invalid).required(errorMessages.required),
 		password: string().when(["createAccount"], ([createAccount], field) =>
-			createAccount ? field.min(8, "Password must be at least 8 characters").required() : field,
+			createAccount ? field.min(8, "Пароль має містити щонайменше 8 символів").required() : field,
 		),
 	}) as Schema<GuestUserFormData>;
 

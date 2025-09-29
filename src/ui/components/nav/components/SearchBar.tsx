@@ -20,7 +20,7 @@ export const SearchBar = ({ channel }: { channel: string }) => {
 				<input
 					type="text"
 					name="search"
-					placeholder="Search for products..."
+					placeholder="Пошук за товаром..."
 					autoComplete="on"
 					required
 					className="h-10 w-full rounded-md border border-neutral-300 bg-transparent bg-white px-4 py-2 pr-10 text-sm text-black placeholder:text-neutral-500 focus:border-black focus:ring-black"

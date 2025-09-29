@@ -27,23 +27,23 @@ export async function LoginForm() {
 			>
 				<div className="mb-2">
 					<label className="sr-only" htmlFor="email">
-						Email
+						Електронна пошта
 					</label>
 					<input
 						type="email"
 						name="email"
-						placeholder="Email"
+						placeholder="Електронна пошта"
 						className="w-full rounded border bg-neutral-50 px-4 py-2"
 					/>
 				</div>
 				<div className="mb-4">
 					<label className="sr-only" htmlFor="password">
-						Password
+						Пароль
 					</label>
 					<input
 						type="password"
 						name="password"
-						placeholder="Password"
+						placeholder="Пароль"
 						autoCapitalize="off"
 						autoComplete="off"
 						className="w-full rounded border bg-neutral-50 px-4 py-2"
@@ -54,7 +54,7 @@ export async function LoginForm() {
 					className="rounded bg-neutral-800 px-4 py-2 text-neutral-200 hover:bg-neutral-700"
 					type="submit"
 				>
-					Log In
+					Увійти
 				</button>
 			</form>
 			<div></div>

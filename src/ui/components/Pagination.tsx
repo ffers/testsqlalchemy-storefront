@@ -21,7 +21,7 @@ export async function Pagination({
 				})}
 				aria-disabled={!pageInfo.hasNextPage}
 			>
-				Next page
+				Наступна сторінка
 			</LinkWithChannel>
 		</nav>
 	);

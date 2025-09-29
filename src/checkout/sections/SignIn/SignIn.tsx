@@ -63,9 +63,9 @@ export const SignIn: React.FC<SignInProps> = ({
 
 	return (
 		<SignInFormContainer
-			title="Sign in"
-			redirectSubtitle="New customer?"
-			redirectButtonLabel="Guest checkout"
+			title="Увійти"
+			redirectSubtitle="Новий клієнт?"
+			redirectButtonLabel="Продовжити як гість"
 			onSectionChange={onSectionChange}
 		>
 			<FormProvider form={form}>
@@ -73,19 +73,19 @@ export const SignIn: React.FC<SignInProps> = ({
 					<TextInput
 						required
 						name="email"
-						label="Email"
+						label="Електронна пошта"
 						onChange={(event) => {
 							handleChange(event);
 							onEmailChange(event.currentTarget.value);
 						}}
 					/>
-					<PasswordInput name="password" label="Password" required />
+					<PasswordInput name="password" label="Пароль" required />
 					<div className="flex w-full flex-row items-center justify-end">
 						<Button
 							ariaDisabled={isSubmitting}
 							ariaLabel="send password reset link"
 							variant="tertiary"
-							label={passwordResetSent ? "Resend?" : "Forgot password?"}
+							label={passwordResetSent ? "Надіслати ще раз?" : "Забули пароль?"}
 							className="ml-1 mr-4"
 							onClick={(e) => (isSubmitting ? e.preventDefault() : onPasswordResetRequest)}
 						/>
@@ -93,7 +93,7 @@ export const SignIn: React.FC<SignInProps> = ({
 							type="submit"
 							disabled={isSubmitting}
 							ariaLabel={"Sign in"}
-							label={isSubmitting ? "Processing…" : "Sign in"}
+							label={isSubmitting ? "Обробка…" : "Увійти"}
 						/>
 					</div>
 				</div>

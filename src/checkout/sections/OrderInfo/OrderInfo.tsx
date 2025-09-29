@@ -13,16 +13,16 @@ export const OrderInfo = () => {
 		<section className="mt-8">
 			<PaymentSection />
 			<DeliverySection deliveryMethod={deliveryMethod} />
-			<Section title="Contact details">
+			<Section title="Контактна інформація">
 				<p>{userEmail}</p>
 			</Section>
 			{shippingAddress && (
-				<Section title="Shipping address">
+				<Section title="Адреса доставки">
 					<Address address={shippingAddress} />
 				</Section>
 			)}
 			{billingAddress && (
-				<Section title="Billing address">
+				<Section title="Платіжна адреса">
 					<Address address={billingAddress} />
 				</Section>
 			)}
