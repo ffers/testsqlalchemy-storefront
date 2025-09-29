@@ -22,7 +22,7 @@ export const GuestUser: React.FC<GuestUserProps> = ({
 	return (
 		<SignInFormContainer
 			title="Контактна інформація"
-			redirectSubtitle="Вже зареєстровани?"
+			redirectSubtitle="Вже зареєстровані?"
 			redirectButtonLabel="Увійти"
 			onSectionChange={onSectionChange}
 		>

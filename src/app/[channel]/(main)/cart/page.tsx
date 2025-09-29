@@ -73,7 +73,7 @@ export default async function Page(props: { params: Promise<{ channel: string }>
 									</p>
 								</div>
 								<div className="flex justify-between">
-									<div className="text-sm font-bold">Qty: {item.quantity}</div>
+									<div className="text-sm font-bold">К-сть: {item.quantity}</div>
 									<DeleteLineButton checkoutId={checkoutId} lineId={item.id} />
 								</div>
 							</div>

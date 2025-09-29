@@ -16,7 +16,7 @@ export const DeliverySection = ({ deliveryMethod }: { deliveryMethod: OrderFragm
 	};
 
 	return (
-		<Section title="Delivery method">
+		<Section title="Спосіб доставки">
 			{!isShipping(deliveryMethod) ? (
 				<p color="secondary">Not applicable</p>
 			) : (
