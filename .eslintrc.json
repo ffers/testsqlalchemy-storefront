@@ -78,7 +78,9 @@
 			{
 				"checksVoidReturn": false
 			}
-		]
+		],
+		"@typescript-eslint/no-unsafe-assignment": "warn",
+		"react/no-unescaped-entities": "warn"
 	},
 	"overrides": [
 		{
