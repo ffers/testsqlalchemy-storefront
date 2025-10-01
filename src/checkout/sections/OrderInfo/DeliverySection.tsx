@@ -12,7 +12,7 @@ export const DeliverySection = ({ deliveryMethod }: { deliveryMethod: OrderFragm
 			return undefined;
 		}
 
-		return `${min}-${max} business days`;
+		return `${min}-${max} робочих днів`;
 	};
 
 	return (

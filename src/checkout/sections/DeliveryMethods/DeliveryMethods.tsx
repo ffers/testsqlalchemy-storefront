@@ -12,6 +12,7 @@ import { useCheckoutUpdateState } from "@/checkout/state/updateStateStore";
 import { DeliveryMethodsSkeleton } from "@/checkout/sections/DeliveryMethods/DeliveryMethodsSkeleton";
 import { useUser } from "@/checkout/hooks/useUser";
 
+
 export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => {
 	const { checkout } = useCheckout();
 	const { authenticated } = useUser();
@@ -19,12 +20,15 @@ export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => 
 	const form = useDeliveryMethodsForm();
 	const { updateState } = useCheckoutUpdateState();
 
-	const getSubtitle = ({ min, max }: { min?: number | null; max?: number | null }) => {
-		if (!min || !max) {
-			return undefined;
-		}
 
-		return `${min}-${max} business days`;
+    
+	const getSubtitle = ({ min, max }: { min?: number | null; max?: number | null }) => {
+        if (!min || !max) {
+            return undefined;
+		}
+        
+    
+		return `${min}-${max} робочих днів`;
 	};
 
 	if (!checkout?.isShippingRequired || collapsed) {

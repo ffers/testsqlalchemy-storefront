@@ -10,6 +10,9 @@ type GuestUserProps = Pick<SignInFormContainerProps, "onSectionChange"> & {
 	email: string;
 };
 
+
+
+
 export const GuestUser: React.FC<GuestUserProps> = ({
 	onSectionChange,
 	onEmailChange,

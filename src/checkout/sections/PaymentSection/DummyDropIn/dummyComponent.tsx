@@ -57,15 +57,23 @@
 import { Button } from "@/checkout/components";
 import { useCheckout } from "@/checkout/hooks/useCheckout";
 import { useCheckoutComplete } from "@/checkout/hooks/useCheckoutComplete";
+import { useAlerts } from "@/checkout/hooks/useAlerts";
+
 
 export const DummyComponent = () => {
 	const { checkout } = useCheckout();
 	const { onCheckoutComplete, completingCheckout } = useCheckoutComplete();
-
+    const { showCustomErrors } = useAlerts();   
 	// 👇 тут дивишся, що реально є у checkout
 	console.log("Checkout data:", checkout);
 
 	const handleClick = () => {
+        if (!checkout?.email) {
+        showCustomErrors([{ message: "Введіть email для оформлення замовлення" }]);
+        }
+        if (!checkout?.email) {
+        return null;
+    }
 		console.log("Completing checkout with id:", checkout?.id);
 		void onCheckoutComplete();
 	};

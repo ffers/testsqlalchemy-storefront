@@ -86,7 +86,7 @@ export const OrderListItem = ({ order }: Props) => {
 															{product.name}
 														</LinkWithChannel>
 														{item.variant.name !== item.variant.id && Boolean(item.variant.name) && (
-															<p className="mt-1">Variant: {item.variant.name}</p>
+															<p className="mt-1">Різновид: {item.variant.name}</p>
 														)}
 													</div>
 												</div>
