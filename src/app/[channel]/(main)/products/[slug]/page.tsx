@@ -197,7 +197,7 @@ export default async function Page(props: {
 					},
 				}),
 	};
-    const [firstImage, ...otherImages] = images;
+    const [firstImage] = images;
     console.log("Product media:", product);
     console.log("Images array:", images);
 	return (

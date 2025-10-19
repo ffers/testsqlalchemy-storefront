@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from "react";
 
-export function ProductGallery({ images }) {
+export function ProductGallery({ images }: { images: Array<{ url: string; alt?: string }> }) {
   const [activeImage, setActiveImage] = useState<string | null>(null);
   
 
