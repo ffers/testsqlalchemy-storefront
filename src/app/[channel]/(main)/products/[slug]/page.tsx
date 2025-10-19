@@ -115,7 +115,7 @@ export default async function Page(props: {
     
 
 	// const firstImage = product.thumbnail;
-    // @ts-expect-error temporary until codegen update
+
     const images = product.media?.length ? product.media : [product.thumbnail];
 	const description = product?.description ? parser.parse(JSON.parse(product?.description)) : null;
 
