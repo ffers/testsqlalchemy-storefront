@@ -2,17 +2,34 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function ProductGallery({ images }) {
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  
+
+
+
+      useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActiveImage(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <div>
       {/* Галерея */}
-      <div className="flex
-          sm:flex-row sm:overflow-x-auto sm:pb-3
-          sm:w-[320px]">
+      <div
+  className="
+    flex flex-col gap-2
+    sm:flex-row sm:space-x-3 sm:overflow-x-auto sm:pb-3 sm:w-[320px]
+  "
+>
         {images.map((img, index) => (
           <img
             key={index}
@@ -27,10 +44,22 @@ export function ProductGallery({ images }) {
 
       {/* Модальне вікно */}
       {activeImage && (
+        
         <div
           onClick={() => setActiveImage(null)}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
         >
+
+        <button
+        className="absolute top-4 right-4 text-white text-2xl z-50"
+        onClick={(e) => {
+            e.stopPropagation(); // щоб клік по кнопці не закривав фон
+            setActiveImage(null);
+        }}
+        >
+        ×
+        </button>
+
           <img
             src={activeImage}
             alt="Zoomed"

@@ -198,7 +198,7 @@ export default async function Page(props: {
 				}),
 	};
     const [firstImage, ...otherImages] = images;
-    console.log("Product media:", product.media);
+    console.log("Product media:", product);
     console.log("Images array:", images);
 	return (
 		<section className="mx-auto grid max-w-7xl p-8">
