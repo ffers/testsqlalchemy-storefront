@@ -1,14 +1,17 @@
 import { redirect } from "next/navigation";
 import { SearchIcon } from "lucide-react";
 
+
+
 export const SearchBar = ({ channel }: { channel: string }) => {
-	async function onSubmit(formData: FormData) {
-		"use server";
-		const search = formData.get("search") as string;
-		if (search && search.trim().length > 0) {
-			redirect(`/${encodeURIComponent(channel)}/search?query=${encodeURIComponent(search)}`);
-		}
-	}
+  async function onSubmit(formData: FormData) {
+    "use server";
+    const search = formData.get("search") as string;
+    if (search && search.trim().length > 0) {
+      const params = new URLSearchParams({ query: search });
+      redirect(`/${channel}/search?${params.toString()}`);
+    }
+}
 
 	return (
 		<form
