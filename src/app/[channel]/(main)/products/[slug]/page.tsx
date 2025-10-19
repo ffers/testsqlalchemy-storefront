@@ -13,6 +13,9 @@ import { formatMoney, formatMoneyRange } from "@/lib/utils";
 import { CheckoutAddLineDocument, ProductDetailsDocument, ProductListDocument } from "@/gql/graphql";
 import * as Checkout from "@/lib/checkout";
 import { AvailabilityMessage } from "@/ui/components/AvailabilityMessage";
+import { ProductGallery } from "@/ui/components/ProductGallery";
+
+
 
 // export const revalidate = 60;
 export const dynamic = "force-dynamic";
@@ -38,6 +41,7 @@ export async function generateMetadata(
 	if (!product) {
 		notFound();
 	}
+    
 
 	const productName = product.seoTitle || product.name;
 	const variantName = product.variants?.find(({ id }) => id === searchParams.variant)?.name;
@@ -88,6 +92,8 @@ export default async function Page(props: {
 		// revalidate: 60,
 	});
 
+
+
 	// export default async function Page(props: {
 	// 	params: Promise<{ slug: string }>; // 👈 оставляем Promise
 	// 	searchParams: Promise<{ variant?: string }>; // 👈 оставляем Promise
@@ -106,8 +112,11 @@ export default async function Page(props: {
 	if (!product) {
 		notFound();
 	}
+    
 
-	const firstImage = product.thumbnail;
+	// const firstImage = product.thumbnail;
+    // @ts-expect-error temporary until codegen update
+    const images = product.media?.length ? product.media : [product.thumbnail];
 	const description = product?.description ? parser.parse(JSON.parse(product?.description)) : null;
 
 	const variants = product.variants;
@@ -155,7 +164,7 @@ export default async function Page(props: {
 					stop: product?.pricing?.priceRange?.stop?.gross,
 				})
 			: "";
-
+    
 	const productJsonLd: WithContext<Product> = {
 		"@context": "https://schema.org",
 		"@type": "Product",
@@ -188,7 +197,9 @@ export default async function Page(props: {
 					},
 				}),
 	};
-
+    const [firstImage, ...otherImages] = images;
+    console.log("Product media:", product.media);
+    console.log("Images array:", images);
 	return (
 		<section className="mx-auto grid max-w-7xl p-8">
 			<script
@@ -198,6 +209,7 @@ export default async function Page(props: {
 				}}
 			/>
 			<form className="grid gap-2 sm:grid-cols-2 lg:grid-cols-8" action={addItem}>
+                
 				<div className="md:col-span-1 lg:col-span-5">
 					{firstImage && (
 						<ProductImageWrapper
@@ -208,7 +220,37 @@ export default async function Page(props: {
 							src={firstImage.url}
 						/>
 					)}
-				</div>
+                                </div>
+                {/* <div className="product-gallery">
+                {images.map((img, index) => (
+                    <img
+                    key={index}
+                    src={img.url}
+                    alt={img.alt || product.name}
+                    className="w-full object-cover rounded-md mb-2"
+                    />
+                ))}
+                </div> */}
+                {/* <div className="product-gallery grid gap-3">
+                    {/* 🖼 Перша фотографія — велика */}
+                    {/* <img
+                    src={firstImage.url}
+                    alt={firstImage.alt || product.name}
+                    className="w-full h-96 object-cover rounded-md"
+                    /> */}
+
+                    {/* 🖼 Решта фото — менші, дві в ряд */}
+                    {/* <div className="grid gap-2 sm:grid-cols-2 ">
+                    {otherImages.map((img, index) => (
+                        <img
+                        key={index}
+                        src={img.url}
+                        alt={img.alt || product.name}
+                        className="md:col-span-1 lg:col-span-5"
+                        />
+                    ))}
+                    </div>
+                </div> */}
 				<div className="flex flex-col pt-6 sm:col-span-1 sm:px-6 sm:pt-0 lg:col-span-3 lg:pt-16">
 					<div>
 						<h1 className="mb-4 flex-auto text-3xl font-medium tracking-tight text-neutral-900">
@@ -239,6 +281,22 @@ export default async function Page(props: {
 						)}
 					</div>
 				</div>
+                  {/* <div className="grid gap-2 sm:grid-cols-2 ">
+                    {otherImages.map((img, index) => (
+                        <img
+                        key={index}
+                        src={img.url}
+                        alt={img.alt || product.name}
+                        className="sm:col-span-1 lg:col-span-5"
+                        />
+                    ))}
+                    </div> */}
+                  <div className="space-y-6">
+                    <ProductGallery images={product.media?.slice(1)  || []} /> 
+
+                    {/* <h1 className="text-2xl font-bold">{product.name}</h1>
+                    <p>{product.description}</p> */}
+                </div>
 			</form>
 		</section>
 	);

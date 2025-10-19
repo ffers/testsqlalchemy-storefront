@@ -3,8 +3,8 @@
 import { usePathname } from "next/navigation";
 import { LinkWithChannel } from "../atoms/LinkWithChannel";
 
-const companyName = "Jemis";
-
+const companyName = "Jemis W";
+ 
 export const Logo = () => {
 	const pathname = usePathname();
 

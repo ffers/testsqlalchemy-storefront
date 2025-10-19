@@ -6,7 +6,7 @@ import { ProductList } from "@/ui/components/ProductList";
 import { ProductsPerPage } from "@/app/config";
 
 export const metadata = {
-	title: "Товари · Jemis Web",
+	title: "Товари · Jemis W · Socks & Wear.",
 	description: "Усі товари",
 };
 

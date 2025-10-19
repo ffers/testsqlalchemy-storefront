@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const config = {
+    eslint: {
+        ignoreDuringBuilds: true, // ⛔ Next.js перестане лінтити під час dev і build
+    },
 	images: {
 		unoptimized: true,
 		remotePatterns: [

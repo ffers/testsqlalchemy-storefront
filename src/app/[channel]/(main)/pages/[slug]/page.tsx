@@ -15,7 +15,7 @@ export const generateMetadata = async (props: { params: Promise<{ slug: string }
 	});
 
 	return {
-		title: `${page?.seoTitle || page?.title || "Page"} · Jemis Web`,
+		title: `${page?.seoTitle || page?.title || "Page"} · Jemis W - Socks & Wear.`,
 		description: page?.seoDescription || page?.seoTitle || page?.title,
 	};
 };

@@ -6,8 +6,8 @@ import { ProductList } from "@/ui/components/ProductList";
 import { ProductsPerPage } from "@/app/config";
 
 export const metadata = {
-	title: "Пошук товарів· Jemis Web",
-	description: "Пошук товарів на Jemis Web",
+	title: "Пошук товарів· Jemis W",
+	description: "Пошук товарів на Jemis W",
 };
 
 export default async function Page(props: {
