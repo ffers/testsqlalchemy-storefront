@@ -1,5 +1,6 @@
 import { getServerAuthClient } from "@/app/config";
 import { redirect } from "next/navigation";
+import { cookies, headers } from "next/headers";
 
 export async function LoginForm() {
 	return (
@@ -27,12 +28,36 @@ export async function LoginForm() {
                     throw new Error(data.tokenCreate.errors[0].message || "Login failed");
                     }
                     if (data?.tokenCreate?.token) {
-  // можеш зберегти токен у cookies, якщо потрібно
-  redirect("/"); // або "/", або куди потрібно
-}
+  const h = headers();
+  const c = cookies();
+  const host = (h.get("host") || "jemis.com.ua").split(":")[0];
+  const https = (h.get("x-forwarded-proto") || "https") === "https";
 
-// ✅ головне — щоб React не ламався
-return; 
+  c.set("saleorAccessToken", data?.tokenCreate?.token, {
+    httpOnly: true,
+    secure: https,
+    sameSite: "lax",
+    domain: host,
+    path: "/",
+    maxAge: 15 * 60,
+  });
+
+  c.set("saleorRefreshToken", data?.tokenCreate?.refreshToken, {
+    httpOnly: true,
+    secure: https,
+    sameSite: "lax",
+    domain: host,
+    path: "/",
+    maxAge: 30 * 24 * 60 * 60,
+  });
+
+
+                    // можеш зберегти токен у cookies, якщо потрібно
+                    redirect("/"); // або "/", або куди потрібно
+                    }
+
+                    // ✅ головне — щоб React не ламався
+                    return; 
 				}}
 			>
 				<div className="mb-2">
