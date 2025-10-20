@@ -13,7 +13,9 @@ gql/
 
 # next.js
 
-
+# media / uploads
+/media/
+media/
 # production
 /build
 

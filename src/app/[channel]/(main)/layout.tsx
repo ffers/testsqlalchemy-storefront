@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 // список дозволених каналів
-const KNOWN_CHANNELS = ["ua", "default-channel", "rams"];
+const KNOWN_CHANNELS = ["ua", "default-channel", "channel-pln"];
 const DEFAULT_CHANNEL = "ua";
 
 export default async function RootLayout(props: {
