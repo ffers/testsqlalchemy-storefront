@@ -1,4 +1,5 @@
 import { getServerAuthClient } from "@/app/config";
+import { redirect } from "next/navigation";
 
 export async function LoginForm() {
 	return (
@@ -19,10 +20,19 @@ export async function LoginForm() {
 						await getServerAuthClient()
 					).signIn({ email, password }, { cache: "no-store" });
 
-					if (data.tokenCreate.errors.length > 0) {
-						// setErrors(data.tokenCreate.errors.map((error) => error.message));
-						// setFormValues(DefaultValues);
-					}
+					console.log("LOGIN RESPONSE:", data); // 👉 побачиш у логах, що GraphQL відповідає
+
+                    if (data?.tokenCreate?.errors?.length) {
+                    console.error("LOGIN ERRORS:", data.tokenCreate.errors);
+                    throw new Error(data.tokenCreate.errors[0].message || "Login failed");
+                    }
+                    if (data?.tokenCreate?.token) {
+  // можеш зберегти токен у cookies, якщо потрібно
+  redirect("/"); // або "/", або куди потрібно
+}
+
+// ✅ головне — щоб React не ламався
+return; 
 				}}
 			>
 				<div className="mb-2">
