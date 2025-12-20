@@ -28,12 +28,19 @@ export async function LoginForm() {
                     throw new Error(data.tokenCreate.errors[0].message || "Login failed");
                     }
                     if (data?.tokenCreate?.token) {
-    const h = await headers();
-    const c = await cookies();
+  const h = await headers();
+  const c = await cookies();
   const host = (h.get("host") || "jemis.com.ua").split(":")[0];
   const https = (h.get("x-forwarded-proto") || "https") === "https";
 
-  c.set("saleorAccessToken", data?.tokenCreate?.token, {
+    const token = data?.tokenCreate?.token;
+    const refresh = data?.tokenCreate?.refreshToken;
+
+    if (!token || !refresh) {
+    throw new Error("Missing tokens");
+    }
+
+  c.set("saleorAccessToken", token, {
     httpOnly: true,
     secure: https,
     sameSite: "lax",
@@ -42,7 +49,7 @@ export async function LoginForm() {
     maxAge: 15 * 60,
   });
 
-  c.set("saleorRefreshToken", data?.tokenCreate?.refreshToken, {
+  c.set("saleorRefreshToken", refresh, {
     httpOnly: true,
     secure: https,
     sameSite: "lax",
