@@ -28,8 +28,8 @@ export async function LoginForm() {
                     throw new Error(data.tokenCreate.errors[0].message || "Login failed");
                     }
                     if (data?.tokenCreate?.token) {
-  const h = headers();
-  const c = cookies();
+    const h = await headers();
+    const c = await cookies();
   const host = (h.get("host") || "jemis.com.ua").split(":")[0];
   const https = (h.get("x-forwarded-proto") || "https") === "https";
 
