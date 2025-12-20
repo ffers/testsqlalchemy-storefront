@@ -20,8 +20,8 @@ export async function loginAction(formData: FormData) {
   if (!token || !refresh) throw new Error("Missing tokens");
 
   // --- вручну ставимо куки ---
-  const h = headers();
-  const c = cookies();
+    const h = await headers();
+    const c = await cookies();
   const host = (h.get("host") || "jemis.com.ua").split(":")[0];
   const https = (h.get("x-forwarded-proto") || "https") === "https";
 
