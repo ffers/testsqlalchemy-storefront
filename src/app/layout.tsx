@@ -3,6 +3,7 @@ import "./globals.css";
 import { Suspense, type ReactNode } from "react";
 import { type Metadata } from "next";
 import { DraftModeNotification } from "@/ui/components/DraftModeNotification";
+import { LiveChatProvider } from "@/ui/components/LiveChatWidget";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,9 @@ export default function RootLayout(props: { children: ReactNode }) {
 				{children}
 				<Suspense>
 					<DraftModeNotification />
+				</Suspense>
+				<Suspense fallback={null}>
+					<LiveChatProvider />
 				</Suspense>
 			</body>
 		</html>
