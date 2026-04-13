@@ -14,17 +14,17 @@ export const OrderListItem = ({ order }: Props) => {
 			<div className="flex flex-col gap-2 border bg-neutral-200/20 px-6 py-4 md:grid md:grid-cols-4 md:gap-8">
 				<dl className="flex flex-col divide-y divide-neutral-200 text-sm md:col-span-3 md:grid md:grid-cols-3 md:gap-6 md:divide-none lg:col-span-2">
 					<div className="flex flex-row items-center justify-between py-4 md:flex-col md:items-start md:gap-y-1">
-						<dt className="font-medium text-neutral-900">Order number</dt>
+						<dt className="font-medium text-neutral-900">Номер замовлення</dt>
 						<dd className="text-neutral-600">{order.number}</dd>
 					</div>
 					<div className="flex flex-row items-center justify-between py-4 md:flex-col md:items-start md:gap-y-1">
-						<dt className="font-medium text-neutral-900">Date placed</dt>
+						<dt className="font-medium text-neutral-900">Дата оформлення</dt>
 						<dd className="text-neutral-600">
 							<time dateTime={order.created}>{formatDate(new Date(order.created))}</time>
 						</dd>
 					</div>
 					<div className="flex flex-row items-center justify-between py-4 md:flex-col md:items-start md:gap-y-1">
-						<dt className="font-medium text-neutral-900">Payment status</dt>
+						<dt className="font-medium text-neutral-900">Статус оплати</dt>
 						<dd>
 							<PaymentStatus status={order.paymentStatus} />
 						</dd>
@@ -47,9 +47,9 @@ export const OrderListItem = ({ order }: Props) => {
 						<table className="w-full text-sm text-neutral-500">
 							<thead className="sr-only">
 								<tr>
-									<td>product</td>
-									<td className="max-md:hidden">quantity and unit price</td>
-									<td>price</td>
+									<td>товар</td>
+									<td className="max-md:hidden">кількість та ціна за одиницю</td>
+									<td>вартість</td>
 								</tr>
 							</thead>
 							<tbody className="md:divide-y">
@@ -125,7 +125,7 @@ export const OrderListItem = ({ order }: Props) => {
 						</table>
 					</div>
 					<dl className="flex justify-between border-y py-6 text-sm font-medium text-neutral-900 md:border md:px-6">
-						<dt>Total amount including delivery</dt>
+						<dt>Загальна сума з урахуванням доставки</dt>
 						<dd>{formatMoney(order.total.gross.amount, order.total.gross.currency)}</dd>
 					</dl>
 				</>
