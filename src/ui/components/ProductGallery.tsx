@@ -5,66 +5,90 @@
 import { useState, useEffect } from "react";
 
 export function ProductGallery({ images }: { images: Array<{ url: string; alt?: string }> }) {
-  const [activeImage, setActiveImage] = useState<string | null>(null);
-  
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-
-
-      useEffect(() => {
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setActiveImage(null);
+        setActiveIndex(null);
+      } else if (event.key === "ArrowRight") {
+        setActiveIndex((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
+      } else if (event.key === "ArrowLeft") {
+        setActiveIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [images.length]);
 
   return (
     <div>
       {/* Галерея */}
       <div
-  className="
-    flex flex-col gap-2
-    sm:flex-row sm:space-x-3 sm:overflow-x-auto sm:pb-3 sm:w-[320px]
-  "
->
+        className="flex flex-row gap-3 overflow-x-auto snap-x snap-mandatory pb-4 w-full sm:grid sm:grid-cols-2 sm:gap-2 sm:overflow-visible sm:pb-0"
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        <style dangerouslySetInnerHTML={{ __html: `::-webkit-scrollbar { display: none; }` }} />
         {images.map((img, index) => (
           <img
             key={index}
             src={img.url}
             alt={img.alt || ""}
-            onClick={() => setActiveImage(img.url)}
-            className={`object-cover rounded-md cursor-pointer transition-transform duration-300 hover:scale-105
-              ${index === 0 ? "col-span-2 h-48" : "h-48"}`}
+            onClick={() => setActiveIndex(index)}
+            className={`snap-start shrink-0 w-[85%] h-72 object-cover rounded-md cursor-pointer transition-transform duration-300 hover:scale-105 sm:w-full sm:h-48 sm:snap-none ${
+              index === 0 ? "sm:hidden" : ""
+            }`}
           />
         ))}
       </div>
 
       {/* Модальне вікно */}
-      {activeImage && (
-        
+      {activeIndex !== null && (
         <div
-          onClick={() => setActiveImage(null)}
+          onClick={() => setActiveIndex(null)}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
         >
+          <button
+            className="absolute top-4 right-4 text-white text-4xl z-50 p-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveIndex(null);
+            }}
+          >
+            &times;
+          </button>
 
-        <button
-        className="absolute top-4 right-4 text-white text-2xl z-50"
-        onClick={(e) => {
-            e.stopPropagation(); // щоб клік по кнопці не закривав фон
-            setActiveImage(null);
-        }}
-        >
-        ×
-        </button>
+          {activeIndex > 0 && (
+            <button
+              className="absolute left-2 sm:left-8 text-white text-4xl z-50 p-4 select-none"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveIndex(activeIndex - 1);
+              }}
+            >
+              &#10094;
+            </button>
+          )}
 
           <img
-            src={activeImage}
+            src={images[activeIndex].url}
             alt="Zoomed"
             className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg transition-all duration-300"
+            onClick={(e) => e.stopPropagation()}
           />
+
+          {activeIndex < images.length - 1 && (
+            <button
+              className="absolute right-2 sm:right-8 text-white text-4xl z-50 p-4 select-none"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveIndex(activeIndex + 1);
+              }}
+            >
+              &#10095;
+            </button>
+          )}
         </div>
       )}
     </div>

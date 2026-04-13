@@ -10,7 +10,7 @@ export const metadata = {
 };
 
 // список дозволених каналів
-const DEFAULT_CHANNEL =  process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "default" ;
+const DEFAULT_CHANNEL = 'ua' // process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "default" ;
 const KNOWN_CHANNELS = [DEFAULT_CHANNEL];
 
 export default async function RootLayout(props: {

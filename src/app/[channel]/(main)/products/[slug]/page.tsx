@@ -208,19 +208,22 @@ export default async function Page(props: {
 					__html: JSON.stringify(productJsonLd),
 				}}
 			/>
-			<form className="grid gap-2 sm:grid-cols-2 lg:grid-cols-8" action={addItem}>
+			<form className="grid gap-2 sm:grid-cols-2 lg:grid-cols-8 items-start" action={addItem}>
                 
-				<div className="md:col-span-1 lg:col-span-5">
+				<div className="md:col-span-1 lg:col-span-5 sm:sticky sm:top-24 sm:space-y-6">
 					{firstImage && (
-						<ProductImageWrapper
-							priority={true}
-							alt={firstImage.alt ?? ""}
-							width={1024}
-							height={1024}
-							src={firstImage.url}
-						/>
+						<div className="hidden sm:block">
+							<ProductImageWrapper
+								priority={true}
+								alt={firstImage.alt ?? ""}
+								width={1024}
+								height={1024}
+								src={firstImage.url}
+							/>
+						</div>
 					)}
-                                </div>
+					<ProductGallery images={product.media || []} />
+				</div>
                 {/* <div className="product-gallery">
                 {images.map((img, index) => (
                     <img
@@ -281,22 +284,6 @@ export default async function Page(props: {
 						)}
 					</div>
 				</div>
-                  {/* <div className="grid gap-2 sm:grid-cols-2 ">
-                    {otherImages.map((img, index) => (
-                        <img
-                        key={index}
-                        src={img.url}
-                        alt={img.alt || product.name}
-                        className="sm:col-span-1 lg:col-span-5"
-                        />
-                    ))}
-                    </div> */}
-                  <div className="space-y-6">
-                    <ProductGallery images={product.media?.slice(1)  || []} /> 
-
-                    {/* <h1 className="text-2xl font-bold">{product.name}</h1>
-                    <p>{product.description}</p> */}
-                </div>
 			</form>
 		</section>
 	);

@@ -65,7 +65,7 @@ export default async function Page(props: { params: Promise<{ channel: string }>
 										</LinkWithChannel>
 										<p className="mt-1 text-sm text-neutral-500">{item.variant?.product?.category?.name}</p>
 										{item.variant.name !== item.variant.id && Boolean(item.variant.name) && (
-											<p className="mt-1 text-sm text-neutral-500">Variant: {item.variant.name}</p>
+											<p className="mt-1 text-sm text-neutral-500">Варіант: {item.variant.name}</p>
 										)}
 									</div>
 									<p className="text-right font-semibold text-neutral-900">
