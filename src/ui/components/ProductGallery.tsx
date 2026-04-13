@@ -36,7 +36,7 @@ export function ProductGallery({ images }: { images: Array<{ url: string; alt?: 
             src={img.url}
             alt={img.alt || ""}
             onClick={() => setActiveIndex(index)}
-            className={`snap-start shrink-0 w-[85%] h-72 object-cover rounded-md cursor-pointer transition-transform duration-300 hover:scale-105 sm:w-full sm:h-48 sm:snap-none ${
+            className={`snap-start shrink-0 w-[85%] h-[450px] object-cover rounded-md cursor-pointer transition-transform duration-300 hover:scale-105 sm:w-full sm:h-48 sm:snap-none ${
               index === 0 ? "sm:hidden" : ""
             }`}
           />
