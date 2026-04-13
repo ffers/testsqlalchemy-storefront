@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { LinkWithChannel } from "../atoms/LinkWithChannel";
 
-const companyName = "Jemis·Wear";
+const companyName = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT";
  
 export const Logo = () => {
 	const pathname = usePathname();

@@ -2,16 +2,16 @@ import { type ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { Footer } from "@/ui/components/Footer";
 import { Header } from "@/ui/components/Header";
-
+const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT"
 export const metadata = {
-  title: "Jemis W - Socks & Wear.",
+  title: `${NEXT_PUBLIC_NAME}· Socks & Wear.`,
   description:
     "Starter pack for building performant e-commerce experiences with Saleor.",
 };
 
 // список дозволених каналів
-const KNOWN_CHANNELS = ["ua", "default-channel", "channel-pln"];
-const DEFAULT_CHANNEL = "ua";
+const KNOWN_CHANNELS = ["nw"];
+const DEFAULT_CHANNEL = "nw";
 
 export default async function RootLayout(props: {
   children: ReactNode;

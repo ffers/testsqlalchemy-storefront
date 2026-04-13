@@ -20,7 +20,7 @@ export async function Footer({ channel }: { channel: string }) {
 			})
 		: null;
 	const currentYear = new Date().getFullYear();
-
+	const public_name = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT"
 	return (
 		<footer className="border-neutral-300 bg-neutral-50">
 			<div className="mx-auto max-w-7xl px-4 lg:px-8">
@@ -80,9 +80,10 @@ export async function Footer({ channel }: { channel: string }) {
 						</label>
 					</div>
 				)}
+				
 
 				<div className="flex flex-col justify-between border-t border-neutral-200 py-10 sm:flex-row">
-					<p className="text-sm text-neutral-500">Copyright &copy; {currentYear} Jemis·W, Inc.</p>
+					<p className="text-sm text-neutral-500">Copyright &copy; {currentYear} {public_name}, Inc.</p>
 					<p className="flex gap-1 text-sm text-neutral-500">
 						Powered by{" "}
 						<Link target={"_blank"} href={"https://asxcrm.com.ua/"}>

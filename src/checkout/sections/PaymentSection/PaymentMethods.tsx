@@ -1,41 +1,16 @@
-import { useMemo } from "react";
-import { paymentMethodToComponent } from "./supportedPaymentApps";
 import { PaymentSectionSkeleton } from "@/checkout/sections/PaymentSection/PaymentSectionSkeleton";
-import { usePayments } from "@/checkout/sections/PaymentSection/usePayments";
 import { useCheckoutUpdateState } from "@/checkout/state/updateStateStore";
+import { PaymentMethodSelector } from "./PaymentMethodSelector";
 
 export const PaymentMethods = () => {
-	const { availablePaymentGateways, fetching } = usePayments();
 	const {
 		changingBillingCountry,
 		updateState: { checkoutDeliveryMethodUpdate },
 	} = useCheckoutUpdateState();
 
-	const gatewaysWithDefinedComponent = useMemo(
-		() => availablePaymentGateways.filter((gateway) => gateway.id in paymentMethodToComponent),
-		[availablePaymentGateways],
-	);
-	console.log("Gateways from API:", availablePaymentGateways);
-	console.log("Expected IDs:", Object.keys(paymentMethodToComponent));
-
-	// delivery methods change total price so we want to wait until the change is done
-	if (changingBillingCountry || fetching || checkoutDeliveryMethodUpdate === "loading") {
+	if (changingBillingCountry || checkoutDeliveryMethodUpdate === "loading") {
 		return <PaymentSectionSkeleton />;
 	}
 
-	return (
-		<div className="gap-y-8">
-			{gatewaysWithDefinedComponent.map((gateway) => {
-
-				const Component = paymentMethodToComponent[gateway.id as keyof typeof paymentMethodToComponent]; // fferses
-				return (
-					<Component
-						key={gateway.id}
-						// @ts-expect-error -- gateway matches the id but TypeScript doesn't know that
-						config={gateway}
-					/>
-				);
-			})}
-		</div>
-	);
+	return <PaymentMethodSelector />;
 };

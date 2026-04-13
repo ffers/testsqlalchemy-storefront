@@ -34,6 +34,7 @@ export async function executeGraphQL<Result, Variables>(
 		}),
 		cache: cache,
 		next: { revalidate },
+		redirect: "error" as RequestRedirect,
 	};
 
 	const response = withAuth

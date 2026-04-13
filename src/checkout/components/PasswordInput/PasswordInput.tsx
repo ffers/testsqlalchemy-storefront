@@ -22,15 +22,22 @@ export const PasswordInputComponent = <TName extends string>({
 	required,
 	...props
 }: PasswordInputProps<TName> & FieldProps) => {
-	const error = touched[field.name] ? (errors[field.name] as string) : undefined;
+	const isTouched = touched[field.name];
+	const error = isTouched ? (errors[field.name] as string) : undefined;
+	const hasValue = field.value && String(field.value).trim().length > 0;
+	const isValid = isTouched && hasValue && !error;
 	const [passwordVisible, setPasswordVisible] = useState(false);
 
 	return (
 		<div className="space-y-0.5">
 			<div className="flex flex-col">
-				<label className="text-xs text-neutral-700">
+				<label className={clsx(
+					"text-xs",
+					error ? "text-red-600" : isValid ? "text-green-600" : "text-neutral-700"
+				)}>
 					{label}
 					{required && <span aria-hidden="true">*</span>}
+					{isValid && <span className="ml-1">✓</span>}
 					<div className="relative mt-1 flex items-stretch shadow-sm">
 						<input
 							required={required}
@@ -41,8 +48,12 @@ export const PasswordInputComponent = <TName extends string>({
 							{...field}
 							{...props}
 							className={clsx(
-								"block w-full appearance-none rounded-md border-neutral-300 pr-10 transition-colors focus:border-neutral-300 focus:outline-none focus:ring focus:ring-neutral-200 focus:ring-opacity-50 active:border-neutral-200 active:outline-none",
-								{ "border-red-300": error },
+								"block w-full appearance-none rounded-md border-2 pr-10 transition-colors focus:outline-none focus:ring focus:ring-opacity-50",
+								error
+									? "border-red-400 focus:border-red-400 focus:ring-red-200"
+									: isValid
+										? "border-green-400 focus:border-green-400 focus:ring-green-200"
+										: "border-neutral-300 focus:border-neutral-400 focus:ring-neutral-200",
 								props.className,
 							)}
 						/>
@@ -50,7 +61,7 @@ export const PasswordInputComponent = <TName extends string>({
 							ariaLabel="change password visibility"
 							onClick={() => setPasswordVisible(!passwordVisible)}
 							icon={passwordVisible ? <EyeIcon /> : <EyeHiddenIcon />}
-							className="absolute right-0 mt-px flex h-10 w-10 items-center justify-center rounded-md  text-center focus:border-neutral-300 focus:outline-none focus:ring focus:ring-neutral-200 focus:ring-opacity-50 active:border-neutral-200 active:outline-none"
+							className="absolute right-0 mt-px flex h-10 w-10 items-center justify-center rounded-md text-center focus:border-neutral-300 focus:outline-none focus:ring focus:ring-neutral-200 focus:ring-opacity-50 active:border-neutral-200 active:outline-none"
 						/>
 					</div>
 				</label>

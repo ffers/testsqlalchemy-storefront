@@ -1,47 +1,38 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { getServerAuthClient } from "@/app/config"; // або твій шлях
+import { getServerAuthClient } from "@/app/config";
 
-export async function loginAction(formData: FormData) {
-  const email = formData.get("email")?.toString();
+console.log("NEXT_PUBLIC_STOREFRONT_URL:", process.env.NEXT_PUBLIC_STOREFRONT_URL);
+console.log("NEXT_PUBLIC_SALEOR_API_URL:", process.env.NEXT_PUBLIC_SALEOR_API_URL);
+
+export type LoginState = { error: string } | { success: true } | null;
+
+export async function loginAction(
+  _prevState: LoginState,
+  formData: FormData,
+): Promise<LoginState> {
+  const email = formData.get("email")?.toString().trim();
   const password = formData.get("password")?.toString();
-  if (!email || !password) throw new Error("Email and password are required");
 
-  const auth = await getServerAuthClient();
-  const { data } = await auth.signIn({ email, password }, { cache: "no-store" });
+  if (!email || !password) {
+    return { error: "Введіть email та пароль" };
+  }
 
-  const token = data?.tokenCreate?.token;
-  const refresh = data?.tokenCreate?.refreshToken;
-  const errs = data?.tokenCreate?.errors;
+  try {
+    const authClient = await getServerAuthClient();
 
-  if (errs?.length) throw new Error(errs[0].message || "Login failed");
-  if (!token || !refresh) throw new Error("Missing tokens");
+    const { data } = await authClient.signIn(
+      { email, password },
+      { cache: "no-store" }
+    );
 
-  // --- вручну ставимо куки ---
-    const h = await headers();
-    const c = await cookies();
-  const host = (h.get("host") || "jemis.com.ua").split(":")[0];
-  const https = (h.get("x-forwarded-proto") || "https") === "https";
+    const errors = data?.tokenCreate?.errors;
+    if (errors?.length > 0) {
+      return { error: errors[0].message || "Невірний email або пароль" };
+    }
+  } catch {
+    return { error: "Помилка сервера. Спробуйте пізніше." };
+  }
 
-  c.set("saleorAccessToken", token, {
-    httpOnly: true,
-    secure: https,
-    sameSite: "lax",
-    domain: host,
-    path: "/",
-    maxAge: 15 * 60,
-  });
-
-  c.set("saleorRefreshToken", refresh, {
-    httpOnly: true,
-    secure: https,
-    sameSite: "lax",
-    domain: host,
-    path: "/",
-    maxAge: 30 * 24 * 60 * 60,
-  });
-
-  redirect("/"); // або /account /dashboard
+  return { success: true };
 }

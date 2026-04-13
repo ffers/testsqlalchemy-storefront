@@ -6,7 +6,7 @@ import { PageGetBySlugDocument } from "@/gql/graphql";
 import { executeGraphQL } from "@/lib/graphql";
 
 const parser = edjsHTML();
-
+const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT"
 export const generateMetadata = async (props: { params: Promise<{ slug: string }> }): Promise<Metadata> => {
 	const params = await props.params;
 	const { page } = await executeGraphQL(PageGetBySlugDocument, {
@@ -15,7 +15,7 @@ export const generateMetadata = async (props: { params: Promise<{ slug: string }
 	});
 
 	return {
-		title: `${page?.seoTitle || page?.title || "Page"} · Jemis W - Socks & Wear.`,
+		title: `${page?.seoTitle || page?.title || "Page"} · ${NEXT_PUBLIC_NAME} - Socks & Wear.`,
 		description: page?.seoDescription || page?.seoTitle || page?.title,
 	};
 };

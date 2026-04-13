@@ -3,7 +3,7 @@ import { invariant } from "ts-invariant";
 import { RootWrapper } from "./pageWrapper";
 
 export const metadata = {
-	title: "Оформлення замовлення · Jemis W · Socks & Wear.",
+	title: "Оформлення замовлення · Socks & Wear.",
 };
 
 export default async function CheckoutPage(props: {
@@ -20,9 +20,9 @@ export default async function CheckoutPage(props: {
 		<div className="min-h-dvh bg-white">
 			<section className="mx-auto flex min-h-dvh max-w-7xl flex-col p-8">
 				<div className="flex items-center font-bold">
-					<Link aria-label="homepage" href="/">
-						Jemis
-					</Link>
+				<Link aria-label="homepage" href="/">
+					{process.env.NEXT_PUBLIC_NAME ?? "My App"}
+				</Link>
 				</div>
 				<h1 className="mt-8 text-3xl font-bold text-neutral-900">Оформлення замовлення</h1>
 

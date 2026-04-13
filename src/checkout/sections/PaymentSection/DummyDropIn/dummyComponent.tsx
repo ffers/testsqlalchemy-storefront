@@ -59,22 +59,54 @@ import { useCheckout } from "@/checkout/hooks/useCheckout";
 import { useCheckoutComplete } from "@/checkout/hooks/useCheckoutComplete";
 import { useAlerts } from "@/checkout/hooks/useAlerts";
 
-
 export const DummyComponent = () => {
 	const { checkout } = useCheckout();
 	const { onCheckoutComplete, completingCheckout } = useCheckoutComplete();
-    const { showCustomErrors } = useAlerts();   
-	// 👇 тут дивишся, що реально є у checkout
-	console.log("Checkout data:", checkout);
+	const { showCustomErrors } = useAlerts();
+
+	const validateCheckout = (): boolean => {
+		const errors: string[] = [];
+
+		if (!checkout?.email) {
+			errors.push("Введіть email");
+		}
+
+		if (!checkout?.shippingAddress) {
+			errors.push("Введіть адресу доставки");
+		} else {
+			if (!checkout.shippingAddress.firstName) {
+				errors.push("Введіть ім'я");
+			}
+			if (!checkout.shippingAddress.lastName) {
+				errors.push("Введіть прізвище");
+			}
+			if (!checkout.shippingAddress.phone) {
+				errors.push("Введіть номер телефону");
+			}
+			if (!checkout.shippingAddress.streetAddress1) {
+				errors.push("Введіть адресу");
+			}
+			if (!checkout.shippingAddress.city) {
+				errors.push("Введіть місто");
+			}
+		}
+
+		if (!checkout?.deliveryMethod) {
+			errors.push("Оберіть спосіб доставки");
+		}
+
+		if (errors.length > 0) {
+			showCustomErrors(errors.map((message) => ({ message })));
+			return false;
+		}
+
+		return true;
+	};
 
 	const handleClick = () => {
-        if (!checkout?.email) {
-        showCustomErrors([{ message: "Введіть email для оформлення замовлення" }]);
-        }
-        if (!checkout?.email) {
-        return null;
-    }
-		console.log("Completing checkout with id:", checkout?.id);
+		if (!validateCheckout()) {
+			return;
+		}
 		void onCheckoutComplete();
 	};
 
