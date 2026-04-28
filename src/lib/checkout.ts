@@ -2,17 +2,18 @@ import { cookies } from "next/headers";
 import { CheckoutCreateDocument, CheckoutFindDocument } from "@/gql/graphql";
 import { executeGraphQL } from "@/lib/graphql";
 
-export async function getIdFromCookies(channel: string) {
-	const cookieName = `checkoutId-${channel}`;
-	const checkoutId = (await cookies()).get(cookieName)?.value || "";
+const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+const COOKIE_NAME = `checkoutId-${CHANNEL}`;
+
+export async function getIdFromCookies() {
+	const checkoutId = (await cookies()).get(COOKIE_NAME)?.value || "";
 	return checkoutId;
 }
 
-export async function saveIdToCookie(channel: string, checkoutId: string) {
+export async function saveIdToCookie(checkoutId: string) {
 	const shouldUseHttps =
 		process.env.NEXT_PUBLIC_STOREFRONT_URL?.startsWith("https") || !!process.env.NEXT_PUBLIC_VERCEL_URL;
-	const cookieName = `checkoutId-${channel}`;
-	(await cookies()).set(cookieName, checkoutId, {
+	(await cookies()).set(COOKIE_NAME, checkoutId, {
 		sameSite: "lax",
 		secure: shouldUseHttps,
 	});
@@ -35,13 +36,13 @@ export async function find(checkoutId: string) {
 	}
 }
 
-export async function findOrCreate({ channel, checkoutId }: { checkoutId?: string; channel: string }) {
+export async function findOrCreate({ checkoutId }: { checkoutId?: string }) {
 	if (!checkoutId) {
-		return (await create({ channel })).checkoutCreate?.checkout;
+		return (await create()).checkoutCreate?.checkout;
 	}
 	const checkout = await find(checkoutId);
-	return checkout || (await create({ channel })).checkoutCreate?.checkout;
+	return checkout || (await create()).checkoutCreate?.checkout;
 }
 
-export const create = ({ channel }: { channel: string }) =>
-	executeGraphQL(CheckoutCreateDocument, { cache: "no-cache", variables: { channel } });
+export const create = () =>
+	executeGraphQL(CheckoutCreateDocument, { cache: "no-cache", variables: { channel: CHANNEL } });

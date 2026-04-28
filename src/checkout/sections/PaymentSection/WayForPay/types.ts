@@ -11,6 +11,7 @@ export interface WayForPayPaymentData {
 	merchantAccount: string;
 	merchantDomainName: string;
 	orderReference: string;
+	orderNo: string;
 	orderDate: number;
 	amount: number;
 	currency: string;
@@ -18,12 +19,14 @@ export interface WayForPayPaymentData {
 	productCount: number[];
 	productPrice: number[];
 	merchantSignature: string;
+	clientEmail?: string;
 }
 
 export interface WayForPayCreateResponse {
 	success: boolean;
-	data: WayForPayPaymentData;
-	orderId: string;
+	data?: WayForPayPaymentData;
+	orderId?: string;
+	error?: string;
 }
 
 declare global {

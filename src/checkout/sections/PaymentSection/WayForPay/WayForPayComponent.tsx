@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/checkout/components";
 import { useCheckout } from "@/checkout/hooks/useCheckout";
+import { useUser } from "@/checkout/hooks/useUser";
 import { useAlerts } from "@/checkout/hooks/useAlerts";
-import { type WayForPayConfig, type WayForPayResponse, type WayForPayCreateResponse } from "./types";
+import { type WayForPayConfig, type WayForPayResponse } from "./types";
+import { createWayForPayPayment } from "./actions";
 
 interface WayForPayComponentProps {
 	config: WayForPayConfig;
@@ -12,8 +15,21 @@ interface WayForPayComponentProps {
 
 export const WayForPayComponent = ({ config: _config }: WayForPayComponentProps) => {
 	const { checkout } = useCheckout();
+	const { user } = useUser();
 	const { showCustomErrors, showSuccess } = useAlerts();
+	const router = useRouter();
+
 	const [isProcessing, setIsProcessing] = useState(false);
+	// Зберігаємо orderId після першого /create щоб повторна оплата йшла через orderId
+	const [pendingOrderId, setPendingOrderId] = useState<string | null>(null);
+	const [orderNo, setOrderNo] = useState<string | null>(null);
+
+	// Гарантовано скидаємо processing коли входимо в стан "замовлення очікує оплати"
+	useEffect(() => {
+		if (pendingOrderId) {
+			setIsProcessing(false);
+		}
+	}, [pendingOrderId]);
 
 	const validateCheckout = useCallback((): boolean => {
 		const errors: string[] = [];
@@ -23,22 +39,22 @@ export const WayForPayComponent = ({ config: _config }: WayForPayComponentProps)
 		}
 
 		if (!checkout?.shippingAddress) {
-			errors.push("Введіть адресу доставки");
+			errors.push(user ? "Оберіть адресу доставки у вашому профілі" : "Введіть адресу доставки");
 		} else {
 			if (!checkout.shippingAddress.firstName) {
-				errors.push("Введіть ім'я");
+				errors.push(user ? "Додайте ім'я в адресу профілю" : "Введіть ім'я");
 			}
 			if (!checkout.shippingAddress.lastName) {
-				errors.push("Введіть прізвище");
+				errors.push(user ? "Додайте прізвище в адресу профілю" : "Введіть прізвище");
 			}
 			if (!checkout.shippingAddress.phone) {
-				errors.push("Введіть номер телефону");
+				errors.push(user ? "Додайте номер телефону в адресу профілю" : "Введіть номер телефону");
 			}
 			if (!checkout.shippingAddress.streetAddress1) {
-				errors.push("Введіть адресу");
+				errors.push(user ? "Додайте вулицю в адресу профілю" : "Введіть адресу");
 			}
 			if (!checkout.shippingAddress.city) {
-				errors.push("Введіть місто");
+				errors.push(user ? "Додайте місто в адресу профілю" : "Введіть місто");
 			}
 		}
 
@@ -52,117 +68,113 @@ export const WayForPayComponent = ({ config: _config }: WayForPayComponentProps)
 		}
 
 		return true;
-	}, [checkout, showCustomErrors]);
+	}, [checkout, user, showCustomErrors]);
 
-	const handlePayment = useCallback(async () => {
-		if (!validateCheckout()) {
-			return;
-		}
+	const runWidget = useCallback(
+		(paymentData: Awaited<ReturnType<typeof createWayForPayPayment>>["data"], orderId: string) => {
+			if (!paymentData) return;
 
-		setIsProcessing(true);
-
-		try {
-			// Створюємо платіжні дані через API
-			const crmApiUrl = process.env.NEXT_PUBLIC_CRM_API_URL || "https://asxcrm.com.ua";
-			const response = await fetch(`${crmApiUrl}/api/payment/wayforpay/create`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					checkoutId: checkout.id,
-					email: checkout.email,
-					amount: checkout.totalPrice?.gross?.amount,
-					currency: checkout.totalPrice?.gross?.currency || "UAH",
-					products: checkout.lines?.map((line) => ({
-						name: line.variant?.product?.name || "Товар",
-						count: line.quantity,
-						price: line.totalPrice?.gross?.amount || 0,
-					})),
-				}),
-			});
-
-			if (!response.ok) {
-				const errorData = (await response.json()) as { message?: string };
-				throw new Error(errorData.message || "Помилка створення платежу");
-			}
-
-			const responseData = (await response.json()) as WayForPayCreateResponse;
-
-			if (!responseData.success || !responseData.data) {
-				throw new Error("Невірна відповідь від сервера");
-			}
-
-			const { data: paymentData, orderId } = responseData;
-
-			// Перевіряємо чи завантажений WayForPay SDK
 			if (typeof window.Wayforpay === "undefined") {
-				throw new Error("WayForPay SDK не завантажено");
+				showCustomErrors([{ message: "WayForPay SDK не завантажено" }]);
+				setIsProcessing(false);
+				return;
 			}
 
 			const wayforpay = new window.Wayforpay();
-
-			// Фолбек: якщо WayForPay не викликав жодного callback за 5 хв — розблоковуємо кнопку
 			const widgetTimeout = setTimeout(() => setIsProcessing(false), 5 * 60 * 1000);
-
 			const cleanup = () => clearTimeout(widgetTimeout);
 
 			wayforpay.run(
 				{
 					...paymentData,
 					straightWidget: true,
-					returnUrl: `${window.location.origin}/checkout/payment/success?checkout=${checkout.id}&order=${paymentData.orderReference}`,
-					serviceUrl: `${crmApiUrl}/api/payment/wayforpay/callback`,
-					serviceData: orderId, // Saleor orderId для callback
+					returnUrl: `${window.location.origin}/checkout/order-confirmation?order=${orderId}`,
+					serviceUrl: `${process.env.NEXT_PUBLIC_CRM_API_URL || "https://asxcrm.com.ua"}/api/payment/wayforpay/callback`,
+					serviceData: orderId,
 				},
 				// onApproved
-				async (response: WayForPayResponse) => {
-					console.log("Payment approved:", response);
+				async (_response: WayForPayResponse) => {
+					cleanup();
 					showSuccess("Оплата успішна!");
-					// Checkout вже завершено бекендом при /create (checkoutComplete)
-					// Просто редіректимо на success сторінку
-					cleanup();
-					setIsProcessing(false);
+					setPendingOrderId(null);
+					setOrderNo(null);
+					router.push(`/checkout/order-confirmation?order=${orderId}`);
 				},
-				// onDeclined
-				(response: WayForPayResponse) => {
-					console.log("Payment declined:", response);
+				// onDeclined — також спрацьовує при закритті widget (натиснути X)
+				(_response: WayForPayResponse) => {
 					cleanup();
-					showCustomErrors([
-						{ message: response.reason || "Оплату відхилено. Спробуйте ще раз." },
-					]);
 					setIsProcessing(false);
+					// Замовлення вже створено — показуємо варіанти
+					setPendingOrderId(orderId);
+					setOrderNo(paymentData.orderNo);
 				},
 				// onPending
-				(response: WayForPayResponse) => {
-					console.log("Payment pending:", response);
+				(_response: WayForPayResponse) => {
 					cleanup();
-					showCustomErrors([{ message: "Очікування підтвердження оплати..." }]);
 					setIsProcessing(false);
+					setPendingOrderId(orderId);
+					setOrderNo(paymentData.orderNo);
 				},
 			);
+		},
+		[showCustomErrors, showSuccess, router],
+	);
+
+	const handlePayment = useCallback(async () => {
+		if (!validateCheckout()) return;
+
+		setIsProcessing(true);
+
+		try {
+			const responseData = await createWayForPayPayment(checkout.id, pendingOrderId ?? undefined);
+
+			if (!responseData.success || !responseData.data) {
+				throw new Error(responseData.error || "Помилка створення платежу");
+			}
+
+			const { data: paymentData, orderId } = responseData;
+			if (orderId) setPendingOrderId(orderId);
+
+			runWidget(paymentData, orderId!);
 		} catch (error) {
-			console.error("Payment error:", error);
 			showCustomErrors([
-				{
-					message: error instanceof Error ? error.message : "Помилка оплати. Спробуйте ще раз.",
-				},
+				{ message: error instanceof Error ? error.message : "Помилка оплати. Спробуйте ще раз." },
 			]);
 			setIsProcessing(false);
 		}
-	}, [checkout, showCustomErrors, showSuccess, validateCheckout]);
+	}, [checkout, pendingOrderId, validateCheckout, runWidget, showCustomErrors]);
 
-	const isLoading = isProcessing;
+	// Стан: замовлення створено але не оплачено
+	if (pendingOrderId) {
+		return (
+			<div className="space-y-4">
+				<div className="rounded border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800">
+					<p className="font-semibold">Замовлення створено, але не оплачено</p>
+					<p className="mt-1 text-xs text-yellow-700">
+						Замовлення №{orderNo} збережено. Ви можете оплатити зараз або пізніше.
+					</p>
+				</div>
+				<div className="flex gap-3">
+					<Button
+						variant="primary"
+						onClick={handlePayment}
+						disabled={isProcessing}
+						label={isProcessing ? "Обробка..." : "Оплатити зараз"}
+					/>
+					<Button
+						variant="secondary"
+						onClick={() => router.push(`/checkout/order-confirmation?order=${pendingOrderId}`)}
+						label="Оплатити пізніше"
+					/>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<div className="space-y-4">
 			<div className="flex items-center gap-2 rounded border border-neutral-200 bg-neutral-50 p-3">
-				<svg
-					className="h-6 w-6 text-green-600"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
+				<svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path
 						strokeLinecap="round"
 						strokeLinejoin="round"
@@ -170,19 +182,14 @@ export const WayForPayComponent = ({ config: _config }: WayForPayComponentProps)
 						d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
 					/>
 				</svg>
-				<span className="text-sm text-neutral-700">
-					Оплата карткою через WayForPay
-				</span>
+				<span className="text-sm text-neutral-700">Оплата карткою через WayForPay</span>
 			</div>
-
 			<Button
 				variant="primary"
 				onClick={handlePayment}
-				disabled={isLoading}
-				label={isLoading ? "Обробка платежу..." : "Оплатити картою"}
+				disabled={isProcessing}
+				label={isProcessing ? "Обробка платежу..." : "Оплатити картою"}
 			/>
 		</div>
 	);
 };
-
-

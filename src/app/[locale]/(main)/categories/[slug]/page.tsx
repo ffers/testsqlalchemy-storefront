@@ -4,13 +4,15 @@ import { ProductListByCategoryDocument } from "@/gql/graphql";
 import { executeGraphQL } from "@/lib/graphql";
 import { ProductList } from "@/ui/components/ProductList";
 
+const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+
 export const generateMetadata = async (
-	props: { params: Promise<{ slug: string; channel: string }> },
+	props: { params: Promise<{ slug: string; locale: string }> },
 	parent: ResolvingMetadata,
 ): Promise<Metadata> => {
 	const params = await props.params;
 	const { category } = await executeGraphQL(ProductListByCategoryDocument, {
-		variables: { slug: params.slug, channel: params.channel },
+		variables: { slug: params.slug, channel: CHANNEL },
 		revalidate: 60,
 	});
 
@@ -20,10 +22,10 @@ export const generateMetadata = async (
 	};
 };
 
-export default async function Page(props: { params: Promise<{ slug: string; channel: string }> }) {
+export default async function Page(props: { params: Promise<{ slug: string; locale: string }> }) {
 	const params = await props.params;
 	const { category } = await executeGraphQL(ProductListByCategoryDocument, {
-		variables: { slug: params.slug, channel: params.channel },
+		variables: { slug: params.slug, channel: CHANNEL },
 		revalidate: 60,
 	});
 

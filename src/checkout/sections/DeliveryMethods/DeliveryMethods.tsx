@@ -40,8 +40,10 @@ export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => 
 			<Divider />
 			<div className="py-4" data-testid="deliveryMethods">
 				<Title className="mb-2">Метод Доставки</Title>
-				{!authenticated && !shippingAddress && <p>Заповніть обовязкові поля для вибору методу доставки</p>}
-				{authenticated && !shippingAddress && updateState.checkoutShippingUpdate ? (
+				{!shippingAddress && !updateState.checkoutShippingUpdate && (
+					<p>Оберіть адресу доставки</p>
+				)}
+				{!shippingAddress && updateState.checkoutShippingUpdate ? (
 					<DeliveryMethodsSkeleton />
 				) : (
 					<SelectBoxGroup label="delivery methods">

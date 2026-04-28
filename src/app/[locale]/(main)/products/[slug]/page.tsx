@@ -15,7 +15,7 @@ import * as Checkout from "@/lib/checkout";
 import { AvailabilityMessage } from "@/ui/components/AvailabilityMessage";
 import { ProductGallery } from "@/ui/components/ProductGallery";
 
-
+const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
 
 // export const revalidate = 60;
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ export const revalidate = 60;
 export const fetchCache = "force-no-store";
 export async function generateMetadata(
 	props: {
-		params: Promise<{ slug: string; channel: string }>;
+		params: Promise<{ slug: string; locale: string }>;
 		searchParams: Promise<{ variant?: string }>;
 	},
 	parent: ResolvingMetadata,
@@ -33,7 +33,7 @@ export async function generateMetadata(
 	const { product } = await executeGraphQL(ProductDetailsDocument, {
 		variables: {
 			slug: decodeURIComponent(params.slug),
-			channel: params.channel,
+			channel: CHANNEL,
 		},
 		revalidate: 0,
 	});
@@ -67,10 +67,10 @@ export async function generateMetadata(
 			: null,
 	};
 }
-export async function generateStaticParams({ params }: { params: { channel: string } }) {
+export async function generateStaticParams() {
 	const { products } = await executeGraphQL(ProductListDocument, {
 		revalidate: 60,
-		variables: { first: 20, channel: params.channel },
+		variables: { first: 20, channel: CHANNEL },
 		withAuth: false,
 	});
 
@@ -80,14 +80,14 @@ export async function generateStaticParams({ params }: { params: { channel: stri
 const parser = edjsHTML();
 
 export default async function Page(props: {
-	params: Promise<{ slug: string; channel: string }>;
+	params: Promise<{ slug: string; locale: string }>;
 	searchParams: Promise<{ variant?: string }>;
 }) {
 	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
 	const { product } = await executeGraphQL(ProductDetailsDocument, {
 		variables: {
 			slug: decodeURIComponent(params.slug),
-			channel: params.channel,
+			channel: CHANNEL,
 		},
 		// revalidate: 60,
 	});
@@ -127,12 +127,11 @@ export default async function Page(props: {
 		"use server";
 
 		const checkout = await Checkout.findOrCreate({
-			checkoutId: await Checkout.getIdFromCookies(params.channel),
-			channel: params.channel,
+			checkoutId: await Checkout.getIdFromCookies(),
 		});
 		invariant(checkout, "This should never happen");
 
-		await Checkout.saveIdToCookie(params.channel, checkout.id);
+		await Checkout.saveIdToCookie(checkout.id);
 
 		if (!selectedVariantID) {
 			return;
@@ -198,8 +197,6 @@ export default async function Page(props: {
 				}),
 	};
     const [firstImage] = images;
-    console.log("Product media:", product);
-    console.log("Images array:", images);
 	return (
 		<section className="mx-auto grid max-w-7xl p-8">
 			<script
@@ -268,7 +265,7 @@ export default async function Page(props: {
 								selectedVariant={selectedVariant}
 								variants={variants}
 								product={product}
-								channel={params.channel}
+								locale={params.locale}
 							/>
 						)}
 						<AvailabilityMessage isAvailable={isAvailable} />

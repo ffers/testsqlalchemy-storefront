@@ -40,7 +40,7 @@ export const AddressList: React.FC<AddressListProps> = ({
 					variant="secondary"
 					ariaLabel="add address"
 					onClick={onAddAddressClick}
-					label="Add address"
+					label="Додати адресу"
 					className="w-full"
 				/>
 				<SelectBoxGroup label="user addresses" className="mt-2">

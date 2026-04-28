@@ -2,6 +2,8 @@ import { ProductListByCollectionDocument } from "@/gql/graphql";
 import { executeGraphQL } from "@/lib/graphql";
 import { ProductList } from "@/ui/components/ProductList";
 import { HeroBanner, type BannerSlide } from "@/ui/components/HeroBanner";
+
+const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
 const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT"
 
 export const metadata = {
@@ -43,14 +45,16 @@ const bannerSlides: BannerSlide[] = [
 	},
 ];
 
-export default async function Page(props: { params: Promise<{ channel: string }> }) {
+export default async function Page(props: { params: Promise<{ locale: string }> }) {
 	const params = await props.params;
+	console.log(`[MainPage] locale=${params.locale} channel=${CHANNEL}`);
 	const data = await executeGraphQL(ProductListByCollectionDocument, {
 		variables: {
 			slug: "featured-products",
-			channel: params.channel,
+			channel: CHANNEL,
 		},
 		revalidate: 60,
+		withAuth: false,
 	});
 
 	const products = data.collection?.products?.edges.map(({ node: product }) => product) || [];

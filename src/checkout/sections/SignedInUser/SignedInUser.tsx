@@ -19,10 +19,10 @@ export const SignedInUser: React.FC<SignedInUserProps> = ({ onSectionChange, onS
 	};
 
 	return (
-		<SignInFormContainer title="Account" onSectionChange={onSectionChange}>
+		<SignInFormContainer title="Аккаунт" onSectionChange={onSectionChange}>
 			<div className="flex flex-row justify-between">
 				<p className="text-base font-bold">{user?.email}</p>
-				<Button ariaLabel="Sign out" variant="tertiary" onClick={handleLogout} label="Sign out" />
+				<Button ariaLabel="Sign out" variant="tertiary" onClick={handleLogout} label="Вийти" />
 			</div>
 		</SignInFormContainer>
 	);

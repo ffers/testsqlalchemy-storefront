@@ -5,6 +5,8 @@ import { Pagination } from "@/ui/components/Pagination";
 import { ProductList } from "@/ui/components/ProductList";
 import { ProductsPerPage } from "@/app/config";
 
+const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+
 export const metadata = {
 	title: "Пошук товарів· Open Wear",
 	description: "Пошук товарів на Open Wear",
@@ -12,7 +14,7 @@ export const metadata = {
 
 export default async function Page(props: {
 	searchParams: Promise<Record<"query" | "cursor", string | string[] | undefined>>;
-	params: Promise<{ channel: string }>;
+	params: Promise<{ locale: string }>;
 }) {
 	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
 	const cursor = typeof searchParams.cursor === "string" ? searchParams.cursor : null;
@@ -37,7 +39,7 @@ export default async function Page(props: {
 			after: cursor,
 			sortBy: ProductOrderField.Rating,
 			sortDirection: OrderDirection.Asc,
-			channel: params.channel,
+			channel: CHANNEL,
 		},
 		revalidate: 60,
 	});

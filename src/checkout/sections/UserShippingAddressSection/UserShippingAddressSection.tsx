@@ -47,7 +47,7 @@ export const UserShippingAddressSection: React.FC<UserShippingAddressSectionProp
 						{displayAddressEdit && (
 							<AddressEditForm
 								availableCountries={availableShippingCountries}
-								title="Shipping address"
+								title="Адреса доставки"
 								onClose={() => setDisplayAddressEdit()}
 								address={form.values.addressList.find(getById(editedAddressId)) as AddressFragment}
 								onUpdate={onAddressUpdateSuccess}
@@ -59,7 +59,7 @@ export const UserShippingAddressSection: React.FC<UserShippingAddressSectionProp
 							<AddressList
 								onEditChange={setDisplayAddressEdit}
 								onAddAddressClick={() => setDisplayAddressCreate(true)}
-								title="Shipping address"
+								title="Адреса доставки"
 								checkAddressAvailability={true}
 								form={form}
 							/>

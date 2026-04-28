@@ -5,6 +5,8 @@ import { Pagination } from "@/ui/components/Pagination";
 import { ProductList } from "@/ui/components/ProductList";
 import { ProductsPerPage } from "@/app/config";
 
+const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+
 const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT"
 export const metadata = {
 	title: `Товари · ${NEXT_PUBLIC_NAME} · Socks & Wear.`,
@@ -12,7 +14,7 @@ export const metadata = {
 };
 
 export default async function Page(props: {
-	params: Promise<{ channel: string }>;
+	params: Promise<{ locale: string }>;
 	searchParams: Promise<{
 		cursor: string | string[] | undefined;
 	}>;
@@ -25,9 +27,10 @@ export default async function Page(props: {
 		variables: {
 			first: ProductsPerPage,
 			after: cursor,
-			channel: params.channel,
+			channel: CHANNEL,
 		},
 		revalidate: 60,
+		withAuth: false,
 	});
 
 	if (!products) {

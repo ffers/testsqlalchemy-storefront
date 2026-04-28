@@ -1,11 +1,12 @@
 
-
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-export function ProductGallery({ images }: { images: Array<{ url: string; alt?: string }> }) {
+export function ProductGallery({ images }: { images: Array<{ url: string; alt?: string | null }> }) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [currentScroll, setCurrentScroll] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -22,10 +23,30 @@ export function ProductGallery({ images }: { images: Array<{ url: string; alt?: 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [images.length]);
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const handleScroll = () => {
+      const index = Math.round(el.scrollLeft / el.offsetWidth);
+      setCurrentScroll(index);
+    };
+
+    el.addEventListener("scroll", handleScroll, { passive: true });
+    return () => el.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToIndex = (index: number) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    el.scrollTo({ left: el.offsetWidth * index, behavior: "smooth" });
+  };
+
   return (
     <div>
       {/* Галерея */}
       <div
+        ref={scrollRef}
         className="flex flex-row gap-3 overflow-x-auto snap-x snap-mandatory pb-4 w-full sm:grid sm:grid-cols-2 sm:gap-2 sm:overflow-visible sm:pb-0"
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
@@ -36,12 +57,30 @@ export function ProductGallery({ images }: { images: Array<{ url: string; alt?: 
             src={img.url}
             alt={img.alt || ""}
             onClick={() => setActiveIndex(index)}
-            className={`snap-start shrink-0 w-[85%] h-[450px] object-cover rounded-md cursor-pointer transition-transform duration-300 hover:scale-105 sm:w-full sm:h-48 sm:snap-none ${
+            className={`snap-start shrink-0 w-full h-[450px] object-cover rounded-md cursor-pointer transition-transform duration-300 hover:scale-105 sm:w-full sm:h-48 sm:snap-none ${
               index === 0 ? "sm:hidden" : ""
             }`}
           />
         ))}
       </div>
+
+      {/* Dot-індикатори — тільки мобільний, тільки якщо більше 1 фото */}
+      {images.length > 1 && (
+        <div className="flex justify-center gap-2 mt-2 sm:hidden">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollToIndex(index)}
+              aria-label={`Фото ${index + 1}`}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                currentScroll === index
+                  ? "w-5 bg-neutral-900"
+                  : "w-2 bg-neutral-300"
+              }`}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Модальне вікно */}
       {activeIndex !== null && (

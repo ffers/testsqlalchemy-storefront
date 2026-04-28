@@ -1,5 +1,4 @@
 import { type FallbackProps } from "react-error-boundary";
-import { SaleorLogo } from "@/checkout/assets/images/SaleorLogo";
 import { Button } from "@/checkout/components/Button";
 import { ErrorContentWrapper } from "@/checkout/components/ErrorContentWrapper";
 
@@ -11,11 +10,9 @@ export const PageNotFound = ({ error }: Partial<FallbackProps>) => {
 
 	return (
 		<ErrorContentWrapper>
-			<div className="mb-4 flex w-28 flex-col">
-				<SaleorLogo />
-			</div>
-			<p>We couldn&apos;t fetch information about your checkout. Go back to the store and try again.</p>
-			<Button ariaLabel="Go back to store" onClick={goBack} variant="secondary" label="Go back to store" />
+			<div className="mb-4 text-8xl">🐊</div>
+			<p>Не вдалося завантажити інформацію про ваше замовлення. Поверніться до магазину та спробуйте ще раз.</p>
+			<Button ariaLabel="Повернутись до магазину" onClick={goBack} variant="secondary" label="Повернутись до магазину" />
 		</ErrorContentWrapper>
 	);
 };
