@@ -16,7 +16,7 @@ export default async function Page(props: {
 	searchParams: Promise<Record<"query" | "cursor", string | string[] | undefined>>;
 	params: Promise<{ locale: string }>;
 }) {
-	const [searchParams, params] = await Promise.all([props.searchParams, props.params]);
+	const [searchParams] = await Promise.all([props.searchParams]);
 	const cursor = typeof searchParams.cursor === "string" ? searchParams.cursor : null;
 	const searchValue = searchParams.query;
 

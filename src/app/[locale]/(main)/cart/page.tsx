@@ -5,14 +5,12 @@ import * as Checkout from "@/lib/checkout";
 import { formatMoney, getHrefForVariant } from "@/lib/utils";
 import { LinkWithChannel } from "@/ui/atoms/LinkWithChannel";
 
-const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
 const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT"
 export const metadata = {
 	title: `Кошик покупок ${NEXT_PUBLIC_NAME}· Socks & Wear.`,
 };
 
-export default async function Page(props: { params: Promise<{ locale: string }> }) {
-	const params = await props.params;
+export default async function Page() {
 	const checkoutId = await Checkout.getIdFromCookies();
 
 	const checkout = await Checkout.find(checkoutId);

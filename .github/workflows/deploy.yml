@@ -39,6 +39,7 @@ jobs:
           NEXT_PUBLIC_DESCRIPTION: ${{ vars.NEXT_PUBLIC_DESCRIPTION }}
           NEXT_PUBLIC_DOMEN: ${{ secrets.NEXT_PUBLIC_DOMEN }}
           NEXT_PUBLIC_DEFAULT_CHANNEL: ${{ vars.NEXT_PUBLIC_DEFAULT_CHANNEL }}
+          NEXT_PUBLIC_SALEOR_CHANNEL_SLUG: ${{ vars.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG }}
       - name: Clean remote .next folder
         uses: appleboy/ssh-action@v1.2.0
         with:

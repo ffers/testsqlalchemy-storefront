@@ -20,7 +20,7 @@ export default async function Page(props: {
 	}>;
 }) {
 	const searchParams = await props.searchParams;
-	const params = await props.params;
+
 	const cursor = typeof searchParams.cursor === "string" ? searchParams.cursor : null;
 
 	const { products } = await executeGraphQL(ProductListPaginatedDocument, {
