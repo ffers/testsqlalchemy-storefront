@@ -35,7 +35,7 @@ export const AddressList: React.FC<AddressListProps> = ({
 		<FormProvider form={form}>
 			<div className="flex flex-col">
 				<Title>{title}</Title>
-				{addressList.length < 1 && <p className="mb-3">You currently have no saved addresses.</p>}
+				{addressList.length < 1 && <p className="mb-3">На зараз у вас нема збереженої адреси.</p>}
 				<Button
 					variant="secondary"
 					ariaLabel="add address"

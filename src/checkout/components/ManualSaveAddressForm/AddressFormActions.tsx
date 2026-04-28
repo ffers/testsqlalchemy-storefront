@@ -23,7 +23,7 @@ export const AddressFormActions: React.FC<AddressFormActionsProps> = ({
 				</div>
 			)}
 
-			<Button ariaLabel="Cancel editing" variant="secondary" onClick={onCancel} label="Cancel" />
+			<Button ariaLabel="Cancel editing" variant="secondary" onClick={onCancel} label="Скасувати" />
 			{loading ? (
 				<Button
 					ariaDisabled
@@ -32,7 +32,7 @@ export const AddressFormActions: React.FC<AddressFormActionsProps> = ({
 					label="Processing…"
 				/>
 			) : (
-				<Button ariaLabel="Save address" onClick={onSubmit} label="Save address" />
+				<Button ariaLabel="Save address" onClick={onSubmit} label="Зберегти адресу" />
 			)}
 		</div>
 	);
