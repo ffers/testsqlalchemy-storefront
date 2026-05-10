@@ -47,7 +47,7 @@ export const SummaryItemMoneyInfo: React.FC<SummaryItemMoneyInfoProps> = ({
 
 			{multiplePieces && (
 				<p aria-label="single piece price" color="secondary" className="text-end text-xs">
-					{getFormattedMoney(piecePrice)} each
+					{getFormattedMoney(piecePrice)} кожен
 				</p>
 			)}
 		</div>

@@ -23,7 +23,8 @@ export default async function Page(props: {
 
 	const cursor = typeof searchParams.cursor === "string" ? searchParams.cursor : null;
 
-	const { products } = await executeGraphQL(ProductListPaginatedDocument, {
+	console.log(`[Products] channel="${CHANNEL}" cursor=${cursor}`);
+	const data = await executeGraphQL(ProductListPaginatedDocument, {
 		variables: {
 			first: ProductsPerPage,
 			after: cursor,
@@ -32,6 +33,8 @@ export default async function Page(props: {
 		revalidate: 60,
 		withAuth: false,
 	});
+	console.log(`[Products] відповідь:`, JSON.stringify(data, null, 2));
+	const { products } = data;
 
 	if (!products) {
 		notFound();

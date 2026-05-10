@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { pick } from "lodash-es";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { type AddressFormData } from "@/checkout/components/AddressForm/types";
 import { useAddressFormSchema } from "@/checkout/components/AddressForm/useAddressFormSchema";
 import { type CountryCode } from "@/checkout/graphql";
@@ -33,6 +33,14 @@ export const useAutoSaveAddressForm = ({
 
 	const form = useForm<AutoSaveAddressFormData>({ ...formProps, validationSchema });
 	const { values, validateForm, dirty, handleBlur, handleChange } = form;
+
+	// Синхронізуємо схему валідації коли countryCode змінюється через setFieldValue
+	// (наприклад авто-вибір єдиної країни в CountrySelect)
+	useEffect(() => {
+		if (values.countryCode) {
+			setCountryCode(values.countryCode as CountryCode);
+		}
+	}, [values.countryCode]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const debouncedSubmit = useDebouncedSubmit(onSubmit);
 

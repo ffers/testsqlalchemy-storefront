@@ -14,13 +14,20 @@ import { UserBillingAddressSection } from "@/checkout/sections/UserBillingAddres
 import { PaymentSection, PaymentSectionSkeleton } from "@/checkout/sections/PaymentSection";
 import { GuestBillingAddressSection } from "@/checkout/sections/GuestBillingAddressSection";
 import { useUser } from "@/checkout/hooks/useUser";
+import { useCheckoutUpdateState } from "@/checkout/state/updateStateStore";
 
 export const CheckoutForm = () => {
 	const { user } = useUser();
-	const { checkout } = useCheckout();
+	const { checkout, fetching } = useCheckout();
 	const { passwordResetToken } = getQueryParams();
+	const { updateState } = useCheckoutUpdateState();
 
 	const [showOnlyContact, setShowOnlyContact] = useState(!!passwordResetToken);
+
+	const isDeliveryLoading =
+		updateState.checkoutDeliveryMethodUpdate === "loading" || (fetching && !checkout?.deliveryMethod);
+
+	const showPayment = !showOnlyContact && (!!checkout?.deliveryMethod || isDeliveryLoading);
 
 	return (
 		<div className="flex flex-col items-end">
@@ -40,17 +47,21 @@ export const CheckoutForm = () => {
 							</CollapseSection>
 						</Suspense>
 					)}
-					{checkout?.shippingAddress && (
+					{checkout?.isShippingRequired && (
 						<Suspense fallback={<DeliveryMethodsSkeleton />}>
 							<DeliveryMethods collapsed={showOnlyContact} />
 						</Suspense>
 					)}
-					{checkout?.deliveryMethod && (
-						<Suspense fallback={<PaymentSectionSkeleton />}>
-							<CollapseSection collapse={showOnlyContact}>
-								<PaymentSection />
-							</CollapseSection>
-						</Suspense>
+					{showPayment && (
+						isDeliveryLoading && !checkout?.deliveryMethod
+							? <PaymentSectionSkeleton />
+							: (
+								<Suspense fallback={<PaymentSectionSkeleton />}>
+									<CollapseSection collapse={showOnlyContact}>
+										<PaymentSection />
+									</CollapseSection>
+								</Suspense>
+							)
 					)}
 				</>
 			</div>

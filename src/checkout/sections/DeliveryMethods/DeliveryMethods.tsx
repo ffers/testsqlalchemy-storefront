@@ -48,41 +48,54 @@ export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => 
 		return null;
 	}
 
+	const isLoadingAddress = updateState.checkoutShippingUpdate === "loading";
+
+	const renderContent = () => {
+		if (!shippingAddress && isLoadingAddress) {
+			return <DeliveryMethodsSkeleton />;
+		}
+
+		if (!shippingAddress) {
+			return (
+				<p className="text-sm text-neutral-500">
+					Щоб вибрати метод доставки, спочатку заповніть адресу доставки вище.
+				</p>
+			);
+		}
+
+		return (
+			<SelectBoxGroup label="delivery methods">
+				{shippingMethods?.map(
+					({ id, name, description, price, minimumDeliveryDays: min, maximumDeliveryDays: max }) => {
+						const descriptionText = parseDescription(description);
+						return (
+							<SelectBox key={id} name="selectedMethodId" value={id}>
+								<div className="pointer-events-none flex min-h-12 grow flex-col justify-center">
+									<div className="flex flex-row items-center justify-between self-stretch">
+										<p>{name}</p>
+										{price?.amount > 0 && <p>{getFormattedMoney(price)}</p>}
+									</div>
+									{descriptionText && (
+										<p className="text-xs text-neutral-500 mt-0.5">{descriptionText}</p>
+									)}
+									<p className="font-xs" color="secondary">
+										{getSubtitle({ min, max })}
+									</p>
+								</div>
+							</SelectBox>
+						);
+					},
+				)}
+			</SelectBoxGroup>
+		);
+	};
+
 	return (
 		<FormProvider form={form}>
 			<Divider />
 			<div className="py-4" data-testid="deliveryMethods">
 				<Title className="mb-2">Метод Доставки</Title>
-				{!shippingAddress && !updateState.checkoutShippingUpdate && (
-					<p>Оберіть адресу доставки</p>
-				)}
-				{!shippingAddress && updateState.checkoutShippingUpdate ? (
-					<DeliveryMethodsSkeleton />
-				) : (
-					<SelectBoxGroup label="delivery methods">
-						{shippingMethods?.map(
-							({ id, name, description, price, minimumDeliveryDays: min, maximumDeliveryDays: max }) => {
-								const descriptionText = parseDescription(description);
-								return (
-									<SelectBox key={id} name="selectedMethodId" value={id}>
-										<div className="pointer-events-none flex min-h-12 grow flex-col justify-center">
-											<div className="flex flex-row items-center justify-between self-stretch">
-												<p>{name}</p>
-												{price?.amount > 0 && <p>{getFormattedMoney(price)}</p>}
-											</div>
-											{descriptionText && (
-												<p className="text-xs text-neutral-500 mt-0.5">{descriptionText}</p>
-											)}
-											<p className="font-xs" color="secondary">
-												{getSubtitle({ min, max })}
-											</p>
-										</div>
-									</SelectBox>
-								);
-							},
-						)}
-					</SelectBoxGroup>
-				)}
+				{renderContent()}
 			</div>
 		</FormProvider>
 	);

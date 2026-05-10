@@ -15,6 +15,10 @@ export async function Footer({ channel }: { channel: string }) {
 	});
 	console.log(`[Footer] відповідь:`, JSON.stringify(footerLinks, null, 2));
 
+	if (!footerLinks) {
+		console.error(`[Footer] footerLinks is null — Saleor повернув null для меню "${slug}"`);
+	}
+
 	const channels = process.env.SALEOR_APP_TOKEN
 		? await executeGraphQL(ChannelsListDocument, {
 				withAuth: false,
@@ -38,7 +42,7 @@ export async function Footer({ channel }: { channel: string }) {
 		<footer className="border-neutral-300 bg-neutral-50">
 			<div className="mx-auto max-w-7xl px-4 lg:px-8">
 				<div className="grid grid-cols-3 gap-8 py-16">
-					{footerLinks.menu?.items?.map((item) => {
+					{footerLinks?.menu?.items?.map((item) => {
 						const hasChildren = item.children && item.children.length > 0;
 						const topLink = renderLink(item);
 
