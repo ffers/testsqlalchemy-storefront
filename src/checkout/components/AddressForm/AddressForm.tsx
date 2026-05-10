@@ -89,13 +89,17 @@ export const AddressForm: FC<PropsWithChildren<AddressFormProps>> = ({
 		return true;
 	}
 
+	const isCountrySelected = !!values.countryCode;
+
 	return (
 		<>
 			<Title className="mb-4">{title}</Title>
 			<div className="mt-2 grid grid-cols-1 gap-3">
 				<CountrySelect only={availableCountries} />
-				{orderedAddressFields
-
+				{!isCountrySelected && (
+					<p className="text-sm text-neutral-500">Оберіть країну, щоб заповнити адресу</p>
+				)}
+				{isCountrySelected && orderedAddressFields
 					.filter((field) => shouldShouwField(field))
 					.map((field) => {
 						let isRequired = isRequiredField(field);
@@ -139,7 +143,7 @@ export const AddressForm: FC<PropsWithChildren<AddressFormProps>> = ({
 							/>
 						);
 					})}
-				{children}
+				{isCountrySelected && children}
 			</div>
 		</>
 	);

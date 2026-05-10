@@ -11,6 +11,21 @@ import { FormProvider } from "@/checkout/hooks/useForm/FormProvider";
 import { useCheckoutUpdateState } from "@/checkout/state/updateStateStore";
 import { DeliveryMethodsSkeleton } from "@/checkout/sections/DeliveryMethods/DeliveryMethodsSkeleton";
 
+const parseDescription = (raw?: string | null): string | null => {
+	if (!raw) return null;
+	try {
+		const parsed = JSON.parse(raw) as { blocks?: Array<{ data?: { text?: string } }> };
+		return (
+			parsed.blocks
+				?.map((b) => b.data?.text ?? "")
+				.filter(Boolean)
+				.join(" ") || null
+		);
+	} catch {
+		return raw;
+	}
+};
+
 
 export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => {
 	const { checkout } = useCheckout();
@@ -46,20 +61,25 @@ export const DeliveryMethods: React.FC<CommonSectionProps> = ({ collapsed }) => 
 				) : (
 					<SelectBoxGroup label="delivery methods">
 						{shippingMethods?.map(
-							({ id, name, price, minimumDeliveryDays: min, maximumDeliveryDays: max }) => (
-								<SelectBox key={id} name="selectedMethodId" value={id}>
-									<div className="pointer-events-none flex min-h-12 grow flex-col justify-center">
-										<div className="flex flex-row items-center justify-between self-stretch">
-											<p>{name}</p>
-											{price?.amount > 0 && <p>{getFormattedMoney(price)}</p>}{" "}
-											{/* <p>{getFormattedMoney(price)}</p> */}
+							({ id, name, description, price, minimumDeliveryDays: min, maximumDeliveryDays: max }) => {
+								const descriptionText = parseDescription(description);
+								return (
+									<SelectBox key={id} name="selectedMethodId" value={id}>
+										<div className="pointer-events-none flex min-h-12 grow flex-col justify-center">
+											<div className="flex flex-row items-center justify-between self-stretch">
+												<p>{name}</p>
+												{price?.amount > 0 && <p>{getFormattedMoney(price)}</p>}
+											</div>
+											{descriptionText && (
+												<p className="text-xs text-neutral-500 mt-0.5">{descriptionText}</p>
+											)}
+											<p className="font-xs" color="secondary">
+												{getSubtitle({ min, max })}
+											</p>
 										</div>
-										<p className="font-xs" color="secondary">
-											{getSubtitle({ min, max })}
-										</p>
-									</div>
-								</SelectBox>
-							),
+									</SelectBox>
+								);
+							},
 						)}
 					</SelectBoxGroup>
 				)}

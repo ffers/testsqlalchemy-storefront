@@ -5,7 +5,7 @@ import { Pagination } from "@/ui/components/Pagination";
 import { ProductList } from "@/ui/components/ProductList";
 import { ProductsPerPage } from "@/app/config";
 
-const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+const CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "ua";
 
 const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT"
 export const metadata = {

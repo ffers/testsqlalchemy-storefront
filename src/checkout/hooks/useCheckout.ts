@@ -10,9 +10,9 @@ export const useCheckout = ({ pause = false } = {}) => {
 
 	const [{ data, fetching, stale }, refetch] = useCheckoutQuery({
 		variables: { id, languageCode: "EN_US" },
+		requestPolicy: "cache-and-network",
 		pause: pause,
 	});
-	console.log("useCheckout:", data);
 
 	useEffect(() => setLoadingCheckout(fetching || stale), [fetching, setLoadingCheckout, stale]);
 

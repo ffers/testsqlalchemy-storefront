@@ -53,6 +53,13 @@ export async function executeGraphQL<Result, Variables>(
 		throw new HTTPError(response, body);
 	}
 
+	const contentType = response.headers.get("content-type") ?? "";
+	if (!contentType.includes("application/json")) {
+		const text = await response.text();
+		console.error("[GraphQL] Non-JSON response from Saleor:", response.status, contentType, text.slice(0, 300));
+		throw new Error(`Saleor повернув не JSON відповідь (${response.status}): ${text.slice(0, 100)}`);
+	}
+
 	const body = (await response.json()) as GraphQLRespone<Result>;
 
 	if ("errors" in body) {

@@ -15,7 +15,7 @@ import * as Checkout from "@/lib/checkout";
 import { AvailabilityMessage } from "@/ui/components/AvailabilityMessage";
 import { ProductGallery } from "@/ui/components/ProductGallery";
 
-const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+const CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "ua";
 
 // export const revalidate = 60;
 export const dynamic = "force-dynamic";

@@ -4,7 +4,7 @@ import { ProductListByCollectionDocument } from "@/gql/graphql";
 import { executeGraphQL } from "@/lib/graphql";
 import { ProductList } from "@/ui/components/ProductList";
 
-const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+const CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "ua";
 
 export const generateMetadata = async (
 	props: { params: Promise<{ slug: string; locale: string }> },

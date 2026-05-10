@@ -40,14 +40,18 @@ export const CheckoutForm = () => {
 							</CollapseSection>
 						</Suspense>
 					)}
-					<Suspense fallback={<DeliveryMethodsSkeleton />}>
-						<DeliveryMethods collapsed={showOnlyContact} />
-					</Suspense>
-					<Suspense fallback={<PaymentSectionSkeleton />}>
-						<CollapseSection collapse={showOnlyContact}>
-							<PaymentSection />
-						</CollapseSection>
-					</Suspense>
+					{checkout?.shippingAddress && (
+						<Suspense fallback={<DeliveryMethodsSkeleton />}>
+							<DeliveryMethods collapsed={showOnlyContact} />
+						</Suspense>
+					)}
+					{checkout?.deliveryMethod && (
+						<Suspense fallback={<PaymentSectionSkeleton />}>
+							<CollapseSection collapse={showOnlyContact}>
+								<PaymentSection />
+							</CollapseSection>
+						</Suspense>
+					)}
 				</>
 			</div>
 		</div>

@@ -88,7 +88,7 @@ export const WayForPayComponent = ({ config: _config }: WayForPayComponentProps)
 				{
 					...paymentData,
 					straightWidget: true,
-					returnUrl: `${window.location.origin}/checkout/order-confirmation?order=${orderId}`,
+					returnUrl: `${window.location.origin}/checkout/payment/success?order=${orderId}`,
 					serviceUrl: `${process.env.NEXT_PUBLIC_CRM_API_URL || "https://asxcrm.com.ua"}/api/payment/wayforpay/callback`,
 					serviceData: orderId,
 				},
@@ -98,7 +98,7 @@ export const WayForPayComponent = ({ config: _config }: WayForPayComponentProps)
 					showSuccess("Оплата успішна!");
 					setPendingOrderId(null);
 					setOrderNo(null);
-					router.push(`/checkout/order-confirmation?order=${orderId}`);
+					router.push(`/checkout/payment/success?order=${orderId}`);
 				},
 				// onDeclined — також спрацьовує при закритті widget (натиснути X)
 				(_response: WayForPayResponse) => {
@@ -163,7 +163,7 @@ export const WayForPayComponent = ({ config: _config }: WayForPayComponentProps)
 					/>
 					<Button
 						variant="secondary"
-						onClick={() => router.push(`/checkout/order-confirmation?order=${pendingOrderId}`)}
+						onClick={() => router.push(`/checkout/payment/success?order=${pendingOrderId}`)}
 						label="Оплатити пізніше"
 					/>
 				</div>

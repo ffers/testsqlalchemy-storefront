@@ -6,7 +6,7 @@ import { Header } from "@/ui/components/Header";
 const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT";
 const SUPPORTED_LOCALES = ["uk", "en"];
 const DEFAULT_LOCALE = process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "uk";
-const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+const CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "ua";
 
 export const metadata = {
   title: `${NEXT_PUBLIC_NAME} · Socks & Wear.`,

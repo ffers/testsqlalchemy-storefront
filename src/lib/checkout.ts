@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { CheckoutCreateDocument, CheckoutFindDocument } from "@/gql/graphql";
 import { executeGraphQL } from "@/lib/graphql";
 
-const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+const CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "ua";
 const COOKIE_NAME = `checkoutId-${CHANNEL}`;
 
 export async function getIdFromCookies() {

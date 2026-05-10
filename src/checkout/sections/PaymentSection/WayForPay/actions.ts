@@ -13,18 +13,31 @@ export async function createWayForPayPayment(
 		return { success: false, error: "Токен не налаштовано" };
 	}
 
-	// Якщо є orderId (замовлення вже створено) — передаємо його, не checkoutId
 	const body = orderId ? { orderId } : { checkoutId };
 
-	const response = await fetch(`${crmApiUrl}/api/payment/wayforpay/create`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `${token}`,
-		},
-		body: JSON.stringify(body),
-		cache: "no-store",
-	});
+	let response: Response;
+	try {
+		response = await fetch(`${crmApiUrl}/api/payment/wayforpay/create`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `${token}`,
+			},
+			body: JSON.stringify(body),
+			cache: "no-store",
+		});
+	} catch (err) {
+		return { success: false, error: `Не вдалось звʼязатись з сервером оплати: ${String(err)}` };
+	}
+
+	const contentType = response.headers.get("content-type") ?? "";
+	const isJson = contentType.includes("application/json");
+
+	if (!isJson) {
+		const text = await response.text();
+		console.error("[WayForPay] Unexpected response (not JSON):", response.status, text.slice(0, 300));
+		return { success: false, error: `Неочікувана відповідь від сервера (${response.status})` };
+	}
 
 	if (!response.ok) {
 		const errorData = (await response.json()) as { detail?: string | { error?: string } };

@@ -26233,6 +26233,7 @@ export type CheckoutFragment = {
 		__typename?: "ShippingMethod";
 		id: string;
 		name: string;
+		description?: string | null;
 		maximumDeliveryDays?: number | null;
 		minimumDeliveryDays?: number | null;
 		price: { __typename?: "Money"; currency: string; amount: number };
@@ -26444,6 +26445,7 @@ export type CheckoutQuery = {
 			__typename?: "ShippingMethod";
 			id: string;
 			name: string;
+			description?: string | null;
 			maximumDeliveryDays?: number | null;
 			minimumDeliveryDays?: number | null;
 			price: { __typename?: "Money"; currency: string; amount: number };
@@ -26608,6 +26610,7 @@ export type CheckoutLinesUpdateMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -26761,6 +26764,7 @@ export type CheckoutLineDeleteMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -26914,6 +26918,7 @@ export type CheckoutEmailUpdateMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -27066,6 +27071,7 @@ export type CheckoutCustomerAttachMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -27220,6 +27226,7 @@ export type CheckoutShippingAddressUpdateMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -27374,6 +27381,7 @@ export type CheckoutBillingAddressUpdateMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -27527,6 +27535,7 @@ export type CheckoutDeliveryMethodUpdateMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -27702,6 +27711,7 @@ export type CheckoutAddPromoCodeMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -27856,6 +27866,7 @@ export type CheckoutRemovePromoCodeMutation = {
 				__typename?: "ShippingMethod";
 				id: string;
 				name: string;
+				description?: string | null;
 				maximumDeliveryDays?: number | null;
 				minimumDeliveryDays?: number | null;
 				price: { __typename?: "Money"; currency: string; amount: number };
@@ -28865,6 +28876,7 @@ export const CheckoutFragmentDoc = gql`
 		shippingMethods {
 			id
 			name
+			description
 			price {
 				...Money
 			}

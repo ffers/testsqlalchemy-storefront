@@ -3,7 +3,7 @@ import { executeGraphQL } from "@/lib/graphql";
 import { ProductList } from "@/ui/components/ProductList";
 import { HeroBanner, type BannerSlide } from "@/ui/components/HeroBanner";
 
-const CHANNEL = process.env.NEXT_PUBLIC_SALEOR_CHANNEL_SLUG || "ua";
+const CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "ua";
 const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT"
 
 export const metadata = {
@@ -15,31 +15,31 @@ export const metadata = {
 const bannerSlides: BannerSlide[] = [
 	{
 		id: "1",
-		// image: "/banner-1.jpg", // Додайте зображення в public/
+		image: "/IMG_6501.JPG", // Додайте зображення в public/
 		title: "Нова колекція",
 		subtitle: "Унікальні tie-dye шкарпетки ручної роботи",
 		buttonText: "Переглянути",
-		buttonLink: "/default-channel/products",
+		buttonLink: "/products",
 		textPosition: "left",
 		bgColor: "#4a5568",
 	},
 	{
 		id: "2",
-		// image: "/banner-2.jpg",
+		image: "/IMG_6502.JPG",
 		title: "Безкоштовна доставка",
-		subtitle: "При замовленні від 500 грн",
+		subtitle: "При замовленні від 5000 грн",
 		buttonText: "Замовити",
-		buttonLink: "/default-channel/products",
+		buttonLink: "/products",
 		textPosition: "center",
 		bgColor: "#2d3748",
 	},
 	{
 		id: "3",
-		// image: "/banner-3.jpg",
+		image: "/IMG_6503.JPG",
 		title: "Знижки до -30%",
 		subtitle: "На весь асортимент",
 		buttonText: "Дивитись",
-		buttonLink: "/default-channel/collections/sale",
+		buttonLink: "/collections/sale",
 		textPosition: "right",
 		bgColor: "#1a202c",
 	},
