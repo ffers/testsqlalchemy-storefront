@@ -4,6 +4,7 @@ import { CartNavItem } from "./components/CartNavItem";
 import { NavLinks } from "./components/NavLinks";
 import { MobileMenu } from "./components/MobileMenu";
 import { SearchBar } from "./components/SearchBar";
+import { ChatNavButton } from "@/ui/components/ChatWidget/ChatNavButton";
 
 export const Nav = ({ channel }: { channel: string }) => {
 	return (
@@ -19,7 +20,8 @@ export const Nav = ({ channel }: { channel: string }) => {
 					<UserMenuContainer />
 				</Suspense>
 			</div>
-			<div className="flex items-center">
+			<div className="flex items-center gap-4 lg:gap-6">
+				<ChatNavButton />
 				<Suspense fallback={<div className="w-6" />}>
 					<CartNavItem channel={channel} />
 				</Suspense>

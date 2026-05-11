@@ -1,10 +1,10 @@
 import { type ReactNode } from "react";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Footer } from "@/ui/components/Footer";
 import { Header } from "@/ui/components/Header";
 
 const NEXT_PUBLIC_NAME = process.env.NEXT_PUBLIC_NAME ?? "DEFAULT";
-const SUPPORTED_LOCALES = ["uk", "en"];
+const SUPPORTED_LOCALES = ["uk", "ua", "en"];
 const DEFAULT_LOCALE = process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "uk";
 const CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "ua";
 
@@ -20,7 +20,7 @@ export default async function RootLayout(props: {
   const { locale } = await props.params;
 
   if (!SUPPORTED_LOCALES.includes(locale)) {
-    redirect(`/${DEFAULT_LOCALE}`);
+    notFound();
   }
 
   return (

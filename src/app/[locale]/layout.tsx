@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
-const SUPPORTED_LOCALES = ["uk", "en"];
+const SUPPORTED_LOCALES = ["uk", "ua", "en"];
 
 export const generateStaticParams = async () => {
 	return SUPPORTED_LOCALES.map((locale) => ({ locale }));

@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-const SUPPORTED_LOCALES = ["uk", "en"];
+const SUPPORTED_LOCALES = ["uk", "ua", "en"];
 const DEFAULT_LOCALE = process.env.NEXT_PUBLIC_DEFAULT_LOCALE || "uk";
 
 export function middleware(request: NextRequest) {
@@ -17,13 +17,20 @@ export function middleware(request: NextRequest) {
 		return NextResponse.next();
 	}
 
-	// Перевіряємо чи починається шлях з підтримуваного locale
-	const firstSegment = pathname.split("/")[1];
+	const firstSegment = pathname.split("/")[1] ?? "";
+
+	// Підтримуваний locale — пропускаємо
 	if (SUPPORTED_LOCALES.includes(firstSegment)) {
 		return NextResponse.next();
 	}
 
-	// Редіректимо на дефолтний locale
+	// Схоже на locale (2-3 літери) але не підтримується — пропускаємо,
+	// layout зробить notFound()
+	if (/^[a-z]{2,3}$/.test(firstSegment)) {
+		return NextResponse.next();
+	}
+
+	// Немає префіксу locale — редіректимо на дефолтний
 	const url = request.nextUrl.clone();
 	url.pathname = `/${DEFAULT_LOCALE}${pathname}`;
 	return NextResponse.redirect(url);
