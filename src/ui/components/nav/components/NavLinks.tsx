@@ -6,10 +6,14 @@ import { MenuGetBySlugDocument } from "@/gql/graphql";
 const CHANNEL = process.env.NEXT_PUBLIC_DEFAULT_CHANNEL || "ua";
 
 export const NavLinks = async ({ channel }: { channel: string }) => {
+	const slug = `navbar-${CHANNEL}`;
+	console.log(`[NavLinks] slug="${slug}" channel="${channel}"`);
 	const navLinks = await executeGraphQL(MenuGetBySlugDocument, {
-		variables: { slug: `navbar-${CHANNEL}`, channel },
+		variables: { slug, channel },
 		revalidate: 60 * 60 * 24,
+		withAuth: false,
 	});
+	console.log(`[NavLinks] відповідь:`, JSON.stringify(navLinks));
 
 	return (
 		<>
